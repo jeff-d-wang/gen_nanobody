@@ -1,0 +1,9 @@
+PDB_ID,chain,res_id,insertion_code,res_name
+pdb_00008qf4,B,301,,PO4
+pdb_00008qf4,C,302,,PO4
+pdb_00008idi,F,1,,NAG
+pdb_00008idi,F,2,,NAG
+pdb_00008idi,F,3,,BMA
+pdb_00008idi,F,4,,MAN
+pdb_00008idi,F,5,,MAN
+pdb_00009min,Z,129,,GOL

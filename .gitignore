@@ -20,3 +20,20 @@ report/*.pdf
 report/*.run.xml
 report/*.bcf
 report/*.synctex.gz
+
+# Charlie benchmark deliverables: track processed benchmark data
+!data/processed/
+data/processed/*
+!data/processed/targets.csv
+!data/processed/prepped_v2.csv
+!data/processed/epitope_residues_v2.csv
+!data/processed/antigen_residue_mapping_v2.csv
+!data/processed/structural_qc_final.csv
+!data/processed/prep_failures_v2.csv
+!data/processed/altloc_choices_v2.csv
+!data/processed/nonprotein_components_v2.csv
+!data/processed/mpnn_residue_map.csv
+!data/processed/prepped_v2/
+!data/processed/prepped_mpnn/
+!data/processed/prepped_v2/**
+!data/processed/prepped_mpnn/**
