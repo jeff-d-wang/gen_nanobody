@@ -1,0 +1,94 @@
+\documentclass[11pt, logo, nonumbering]{preprint}
+\usepackage[utf8]{inputenc}
+\usepackage{microtype}
+\usepackage{graphicx}
+%\usepackage{times}
+\usepackage{amsmath}
+\usepackage{booktabs}
+\usepackage{enumitem}
+\usepackage{xcolor}
+\definecolor{mydarkblue}{rgb}{0,0.08,0.45}
+\usepackage[colorlinks=true,linkcolor=mydarkblue,citecolor=mydarkblue,filecolor=mydarkblue,urlcolor=mydarkblue]{hyperref}
+\usepackage{xspace}
+\usepackage{cleveref}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta}
+
+% Bibliography machinery retained for later use; this proposal cites sources as
+% inline hyperlinks, so no bibliography is printed.
+\IfFileExists{csquotes.sty}{\usepackage{csquotes}}{}
+\IfFileExists{biblatex.sty}{%
+  \usepackage[style=numeric-comp,natbib=true,maxbibnames=3,minnames=1,backend=bibtex,doi=false,eprint=false,url=false]{biblatex}
+  \addbibresource{ref.bib}
+}{%
+  \usepackage[numbers,sort&compress]{natbib}
+}
+
+\input{pre}
+
+
+
+
+% for tableofcontent
+% \usepackage{tocloft}
+% \renewcommand{\contentsname}{\hfill\bfseries\Large Contents\hfill}   
+% \renewcommand{\cftaftertoctitle}{\hfill}
+% \renewcommand{\listtablename}{\hfill\bfseries\Large List of Tables} % no \hfill after "List of Tables"...
+%%% using the command "\renewcommand{\cftlottitlefont}{\hfill\bfseries\Large}" works too...
+% \renewcommand{\cftafterlottitle}{\hfill}
+
+
+% Custom styling (add your own as needed)
+
+
+\newcommand{\method}{}
+
+
+\begin{document}
+
+\title{Targeted de novo nanobody design through backbone generation and sequence optimization} 
+ 
+
+\author{
+\textbf{Aidan Jan}$^{1}$ \quad
+\textbf{Charlie Yang}$^{1}$ \quad
+\textbf{Jeffery Wang}$^{1}$ \\
+\textsuperscript{1}Carnegie Mellon University\\
+\texttt{\{ajan, qiyuy, jdw2\}@andrew.cmu.edu} \\
+}
+
+\maketitle
+
+
+\begin{abstract}
+\input{sec/000abstract}
+\end{abstract}
+
+\section{Introduction}
+\label{sec:intro}
+\input{sec/010intro}
+
+\section{Related Work}
+\label{sec:related}
+\input{sec/020related}
+
+\section{Proposed Method}
+\label{sec:method}
+\input{sec/030method}
+
+\section{Experiments}
+\label{sec:experiment}
+\input{sec/040experiment}
+
+\section{Analysis}
+\label{sec:analysis}
+\input{sec/050analysis}
+
+\section{Conclusion}
+\label{sec:conclusion}
+\input{sec/060conclusion}
+
+\section{Additional Details}
+\label{sec:additional}
+\input{sec/070additional}
+\end{document}

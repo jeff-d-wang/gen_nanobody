@@ -1,0 +1,54 @@
+We will compare methods across several targets with known nanobody complexes, withholding reference binding poses during generation. Comparisons will use matched computational budgets and repeated random seeds. The claims below are hypotheses to test.
+
+\begin{center}
+\small
+\begin{tabular}{@{}p{0.26\linewidth} p{0.35\linewidth} p{0.31\linewidth}@{}}
+\toprule
+\textbf{Research question} & \textbf{Proposed claim} & \textbf{Evidence needed} \\
+\midrule
+Does hotspot conditioning improve epitope targeting? & Specifying hotspots increases intended-epitope contacts in repredicted complexes compared with generation without hotspot guidance. & Per-target contact-recovery table; interface overlays; plot of epitope-targeting rates. \\
+\addlinespace
+Does sampling more sequences per backbone improve useful diversity? & Additional sequence samples increase the number of distinct candidates that recover the designed geometry, with diminishing returns. & Candidate-yield versus compute curve; sequence-cluster counts; CDR structural-deviation distributions. \\
+\addlinespace
+Does combined filtering improve candidate selection? & Combining structural confidence, geometry, and interface scores enriches experimentally supported binders more effectively than confidence alone. & Precision-recall curves and top-ranked hit rates on held-out, experimentally labeled designs; comparison table for filtering strategies. \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\paragraph{Benchmark construction.} Targets will be drawn from nanobody--antigen
+complexes in SAbDab, filtered by resolution and clustered by antigen sequence
+identity so that each cluster contributes a single target. Because RFdiffusion,
+RoseTTAFold2 and AlphaFold were trained on the PDB, held-out targets will be
+further restricted to structures deposited after the relevant model training
+cutoffs; without this restriction, apparent design success may reflect
+memorisation rather than generalisation. Targets will be divided into a
+development set, used only to calibrate thresholds, and a held-out test set
+evaluated once.
+
+\paragraph{Success criteria.} A design will count as an in silico success when it
+meets thresholds fixed on the development set before any test evaluation: CDR
+backbone RMSD between the designed and repredicted structure below a stated
+cutoff, recovery of a stated fraction of the intended hotspot contacts, and
+confidence filters on interchain PAE, ipTM and CDR pLDDT. Structure prediction
+for evaluation will use a model that is not part of the design loop, so that no
+predictor scores sequences it helped generate.
+
+\paragraph{Controls.} Each question will be accompanied by matched negative
+controls: hotspots placed on an unrelated surface patch of the same target,
+generation without hotspot guidance, scrambled CDR sequences passed through the
+same filters, and natural nanobody CDRs grafted onto the same framework. These
+bound how much of the measured performance is attributable to the design
+procedure rather than to the target surface or the framework itself.
+
+\paragraph{Statistical treatment and compute accounting.} Designs are nested
+within backbones and backbones within targets, so the unit of analysis for all
+primary comparisons will be the target rather than the individual design.
+Results will be reported per target with bootstrap intervals computed over
+targets, and the number of random seeds will be fixed in advance so that
+observed differences can be judged against seed-to-seed variation. For the
+sampling-depth question, candidate yield will be plotted against GPU-hours
+rather than against the number of sampled sequences, and distinctness will be
+defined by a stated sequence-identity threshold together with CDR structural
+clustering.
+
+\noindent The third question requires experimental binding labels. Without suitable data, we will report structural consistency and ranking agreement rather than claim improved binding success.

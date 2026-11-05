@@ -1,0 +1,24 @@
+% \begin{figure}[htbp]
+% \centering
+% \includegraphics[width=0.33\linewidth]{fig/pipeline.png}
+% \end{figure}
+
+\begin{center}
+    \begin{tikzpicture}[scale=0.9]
+        \node[draw, align=center, minimum height=2cm, minimum width=6cm] at (0, 0) (a) {Target structure, epitope \\ hotspots, and nanobody \\ framework};
+        \node[draw, align=center, minimum height=2cm, minimum width=6cm] at (0, -3) (b) {Antibody-adapted \\ RFdiffusion: generate CDR \\ backbones and binding poses};
+        \node[draw, align=center, minimum height=2cm, minimum width=6cm] at (0, -6) (c) {ProteinMPNN: sample \\ compatible CDR sequences};
+        \node[draw, align=center, minimum height=2cm, minimum width=6cm] at (8, 0) (d) {Structure prediction: assess \\ fold and interface recovery};
+        \node[draw, align=center, minimum height=2cm, minimum width=6cm] at (8, -3) (e) {Rosetta scoring, geometry \\ checks, and diversity selection};
+        \node[draw, align=center, minimum height=2cm, minimum width=6cm] at (8, -6) (f) {Ranked candidates for \\ experimental testing};
+
+        \draw[-{Stealth[scale=2]}] (a) -- (b);
+        \draw[-{Stealth[scale=2]}] (b) -- (c);
+        \draw[-{Stealth[scale=2]}] (c.east) -| (4, 0) -- (d);
+        \draw[-{Stealth[scale=2]}] (d) -- (e);
+        \draw[-{Stealth[scale=2]}] (e) -- (f);
+    \end{tikzpicture}
+\end{center}
+We will preserve a selected nanobody framework while generating its complementarity-determining regions (CDRs) around the specified target surface. ProteinMPNN will sample multiple CDR sequences for each backbone while keeping the framework sequence fixed.\\\\
+Then, we will predict complexes without supplying the generated CDR backbone or binding pose as a template. Evaluation will include framework and CDR pLDDT, interchain PAE, ipTM where available, hotspot contacts, and deviation from the designed interface after target alignment.\\\\
+Rosetta interface scores and shape complementarity will help rank geometrically plausible candidates. These scores are approximate computational assessments, not measured binding free energies. Selection thresholds will be calibrated on a development set before evaluation on held-out targets.

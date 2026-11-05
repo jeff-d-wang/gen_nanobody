@@ -1,0 +1,55 @@
+\subsection{Directions for Going Forward}
+We can develop a candidate-ranking strategy that likely combines structural confidence and inference of geometry, calibrated according to available measured binding data. We can test hotspot guidance from the pipeline and whether, in a computational budget constraint, it is better spent possibly generating more backbones or more sequences per backbone. 
+
+% Three extensions follow naturally from the planned experiments. First, if combined scoring improves ranking on measured binders, the resulting filter can be applied prospectively to the generated candidates to produce a prioritised shortlist, which is the form in which designs would enter an experimental campaign. Second, the filtering comparison can be repeated on binder classes other than nanobodies, testing whether a ranking function calibrated on one design modality transfers to another; existing meta-analyses of de novo binder design are dominated by mini-binders rather than CDR-loop binders, so this transfer is untested. Third, the generation stage currently conditions on a fixed epitope; conditioning instead on a desired specificity profile, for example requiring contacts on one epitope while avoiding a homologous surface, would address cross-reactivity, which is the failure mode most likely to matter for therapeutic use. Experimental validation of a small number of selected candidates by binding assay remains the decisive next step and is outside the scope of this project.
+
+\subsection{Workload Split}
+The team consists of three members, and the division follows the three experiments so that work can proceed in parallel once the shared data layer is in place.
+
+\begin{itemize}[nosep]
+    \item \textbf{Data and benchmarks.} Curation of AVIDa binding labels and $K_D$ records, construction of the SAbDab2 target set and splits, deposition date filtering, and the evaluation harness. Owns the classification and affinity-ranking experiments.
+    \item \textbf{Generation.} Installation and operation of RFantibody and ProteinMPNN, hotspot specification, sampling-depth sweeps, and job orchestration including failure recovery and run manifests. Owns the generation experiment.
+    \item \textbf{Evaluation and scoring.} Structure prediction, Rosetta interface scoring, metric implementation, threshold calibration on the development set, and the reward-hacking and leakage diagnostics.
+    \item \textbf{All members.} Ablations, error analysis, and the written report.
+\end{itemize}
+
+\noindent The first two weeks are shared and sequential, because the outcome of the installation and data audits determines the scope available to each member.  A deliberately simple scoring wrapper will be fixed by the end of week two so that the generation and evaluation work can proceed against a stable interface while the full scoring stack is completed.
+
+\subsection{Timeline}
+\begin{center}
+\small
+\begin{tabular}{@{}c p{0.45\linewidth} p{0.35\linewidth}@{}}
+\toprule
+\textbf{Date} & \textbf{Work} & \textbf{Gate} \\
+\midrule
+Oct. 11 & Environment setup; RFantibody and ProteinMPNN installation; structure predictor access & Pipeline runs end to end on one target \\
+\addlinespace
+Oct. 18 & SAbDab2 target set, date filtering, cluster representatives; AVIDa and $K_D$ curation & Benchmark frozen; split files released \\
+\addlinespace
+Oct. 25 & Classification and affinity-ranking experiments on development data; threshold calibration & Filter comparison complete on development set \\
+\addlinespace
+Nov. 1 & Generation on a pilot subset of targets; hotspot versus unguided & \textbf{Midterm report} \\
+\addlinespace
+Nov. 8 & Full generation sweep across held-out targets and seeds & Per-target yields and contact recovery \\
+\addlinespace
+Nov. 15 & Sampling-depth sweep; candidate yield versus GPU-hours & Diminishing-returns curve \\
+\addlinespace
+Nov. 22 & Ablations; error analysis; leakage checks & All controls reported \\
+\addlinespace
+Nov. 29 & Final analysis, packaging, shortlist assembly & \textbf{Final report} \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+
+\subsection{Computational Requirements}
+Cost is dominated by structure prediction and by the generation sweep rather
+than by model training; no component is trained from scratch. Evaluation is
+staged: all candidates are screened with the fast predictor bundled with the
+design pipeline, and only those passing screening thresholds are re-evaluated
+with the higher-accuracy predictor reserved for final scoring, which is excluded
+from generation and candidate selection.
+
+\noindent We are requesting approximately 100 GPU-hours and 50 CPU-hours.  Per-run cost depends strongly on antigen size and on predictor configuration, so these figures are derived from the design matrix above combined with assumed per-unit timings; we will measure the end-to-end cost of a single target in week one and rescale the request from that measurement rather than from published timings. We expect the bulk of GPU-hour being budgeted for evaluations, backbone \& sequence generation, and validation of generated candidates. The sampling-depth sweep is the schedule-elastic component: a coarser grid still yields the yield-versus-compute curve that the third research question requires. Storage is modest, under 200\,GB including structure files, predicted complexes with their confidence matrices, and run manifests. At this job count failures are routine rather than exceptional, so the pipeline is built with idempotent re-runs, caching keyed by configuration fingerprint, and per-run resource accounting; these are deliverable features rather than operational conveniences. Access to the final-scoring predictor is the main scheduling dependency and will be confirmed in week one.
+
+% https://genaibiomed.github.io/GenAIBioMed2026Fall/docs/Projects/

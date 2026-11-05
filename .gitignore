@@ -1,0 +1,22 @@
+.DS_Store
+__pycache__/
+*.pyc
+.venv/
+env/
+
+# big / regenerable
+data/raw/*
+data/processed/*
+runs/*
+!**/.gitkeep
+
+# latex build junk
+report/*.aux
+report/*.bbl
+report/*.blg
+report/*.log
+report/*.out
+report/*.pdf
+report/*.run.xml
+report/*.bcf
+report/*.synctex.gz

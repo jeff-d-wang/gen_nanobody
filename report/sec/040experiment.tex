@@ -1,0 +1,60 @@
+We will evaluate three aspects of the pipeline: recognition of known binders,
+ranking by measured affinity, and generation of new candidates against targets
+with known nanobody complexes. The first two experiments assess candidate
+selection using experimental labels; the third assesses computational design
+quality. Comparisons will use matched computational budgets and repeated random
+seeds where applicable. The claims below are hypotheses to test.
+
+\begin{center}
+\small
+\begin{tabular}{@{}p{0.26\linewidth} p{0.35\linewidth} p{0.31\linewidth}@{}}
+\toprule
+\textbf{Research question} & \textbf{Proposed claim} & \textbf{Evidence needed} \\
+\midrule
+Can our filter recognize known binders?
+& Combining structural confidence, interface geometry, and Rosetta scores
+ranks experimentally labeled binders above nonbinders more effectively than
+confidence alone.
+& Precision-recall curves; precision among top-ranked candidates; comparison
+of individual and combined filters on AVIDa datasets. \\
+\addlinespace
+Can our scores distinguish stronger from weaker binders?
+& Combined scores better reproduce measured affinity rankings than individual
+scores for nanobodies tested against the same target under comparable
+assay conditions.
+& Spearman correlations; predicted-score versus measured-$pK_D$ plots;
+recovery of the strongest measured binders. \\
+\addlinespace
+Can we generate plausible alternatives for targets with known complexes?
+& Hotspot conditioning increases the yield of distinct candidates that retain
+intended epitope contacts after reprediction compared with unguided generation
+at matched computational cost.
+& Per-target computational pass rates; contact recovery; CDR RMSD;
+interface overlays; distinct candidate yield versus GPU-hours. \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\paragraph{Binding labels.}
+For binding classification, we will use nanobody sequences and experimental binding/nonbinding labels from AVIDa-hIL6, with AVIDa-SARS-CoV-2 as an additional benchmark. These labels reflect screening outcomes rather than quantitative affinity.
+
+\paragraph{Affinity data.}
+For affinity ranking, we will curate experimentally measured $K_D$ values from ANDD, SAbDab-nano, and sdAb-DB, exclude predicted affinities, and retain traceable measurement sources. Comparisons will be grouped by target construct and assay where possible. Stronger binding corresponds to lower $K_D$, or higher $pK_D = -\log_{10}(K_D/\mathrm{M})$.
+
+\paragraph{Generation targets.}
+Design targets are drawn from the SAbDab2 machine learning dataset \href{https://zenodo.org/records/22019991}{(v0.2.0)}, using the single-domain antigen-aware split (\texttt{abag\_split\_sd.csv}), in which antibodies are clustered by CDR sequence identity and protein antigens at 40\% identity, so that no antigen family appears in both partitions. Restricting to single-domain heavy-chain entries bound to a protein antigen yields 1{,}578 structures across 941 PDB entries, partitioned into 143 training clusters and 43 held-out test clusters. Because this split controls sequence redundancy but not structure recency, held-out targets are further filtered by PDB deposition date to postdate the training cutoffs of the generative and structure-prediction models used; a 2023 cutoff retains 21 independent test clusters, and cutoffs between 2022 and 2024 vary this count by at most five. Cluster sizes are highly uneven, with the largest test cluster accounting for 22\% of its structures, so a single representative structure per cluster is selected by resolution and each target is weighted equally in all comparisons. The generator will receive the target structure and a predefined epitope, while the reference nanobody's CDR sequences, coordinates, and binding pose remain withheld.
+
+\paragraph{Data separation.}
+Development data will be used to select scores and calibrate thresholds; held-out test data will be evaluated only after these choices are fixed. Nanobody sequence and CDR clusters will remain within a single split. Experiments testing generalization across targets will also separate antigen families. Structural benchmarks will use structures deposited after documented model training cutoffs where feasible and will be screened for homologous training examples. A recent deposition date alone does not establish that a target is unseen.
+
+\paragraph{Success criteria.}
+Classification and affinity-ranking performance will be assessed against experimental labels. A generated candidate will count as an \emph{in silico} success only if it meets thresholds fixed on the development set for design-to-reprediction CDR backbone RMSD, intended hotspot-contact recovery, interface confidence, and steric clashes. Confidence measures will include interchain PAE, CDR pLDDT, and ipTM where available. Final computational assessment will use a predictor excluded from generation and candidate selection.\\\\
+Native-pose metrics such as DockQ will be used only when reconstructing known complexes. Newly generated sequences may adopt valid binding poses that differ from the reference, so similarity to the reference pose will not be required for computational success.
+
+\paragraph{Controls and ablations.}
+Candidate-selection experiments will compare confidence-only, geometry-only, energy-only, and combined scoring. Generation experiments will compare hotspot-conditioned and unguided sampling under matched computational budgets. Scrambled CDR sequences may provide supplementary stress tests, but neither scrambled sequences nor untested nanobody--target pairs will be treated as experimentally confirmed nonbinders.
+
+\paragraph{Statistical treatment and compute accounting.}
+We will report per-target results and uncertainty estimates that account for sequence relatedness. For AVIDa-hIL6, bootstrap sampling will operate over nanobody clusters, keeping measurements across IL-6 variants together. Multi-target comparisons will use target-level summaries and bootstrap intervals. Generation runs will use a fixed number of random seeds, with designs grouped by backbone and target rather than treated as independent observations. Candidate yield will be plotted against GPU-hours, and distinctness will be defined using prespecified sequence-identity thresholds and CDR structural clustering criteria.
+
+\noindent These experiments will test whether the pipeline identifies measured binders and produces structurally plausible new candidates. Claims that newly generated nanobodies bind, or outperform measured references, will require experimental measurements on those sequences.

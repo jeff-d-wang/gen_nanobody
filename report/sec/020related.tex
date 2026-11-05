@@ -1,0 +1,23 @@
+\begin{center}
+\small
+\begin{tabular}{@{}p{0.23\linewidth} p{0.71\linewidth}@{}}
+\toprule
+\textbf{Category} & \textbf{Relevant work and relationship to this project} \\
+\midrule
+Backbone generation & \href{https://www.nature.com/articles/s41586-023-06415-8}{RFdiffusion} generates protein backbones under structural constraints. It provides the basis for target-conditioned design. \\
+\addlinespace
+Antibody-specific design & \href{https://github.com/RosettaCommons/RFantibody}{RFantibody} already combines antibody-adapted RFdiffusion, ProteinMPNN, and antibody-adapted RoseTTAFold2. This is the closest precedent and the starting point for our evaluation. \\
+\addlinespace
+Inverse folding & \href{https://github.com/dauparas/ProteinMPNN}{ProteinMPNN} designs sequences conditioned on backbone structure. We will examine how sequence sampling affects candidate diversity and structural recovery. \\
+\addlinespace
+Computational assessment & AlphaFold confidence metrics and \href{https://docs.rosettacommons.org/docs/latest/application_documentation/analysis/interface-analyzer}{Rosetta InterfaceAnalyzer} provide complementary structural and interface assessments. We will evaluate their usefulness for ranking candidates. \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\subsection{Existing Methods and Availability}
+\begin{itemize}
+    \item \textbf{BoltzGen:} a broader binder-design framework with nanobody support. Public code and weights; a possible comparison method. \url{https://github.com/HannesStark/boltzgen}
+    \item \textbf{DiffAb:} joint antibody sequence and structure design. Public code and weights; useful for CDR redesign comparisons, although its input assumptions differ.
+    \url{https://github.com/luost26/diffab}
+\end{itemize}
