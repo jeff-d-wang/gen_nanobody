@@ -20,3 +20,4 @@ report/*.pdf
 report/*.run.xml
 report/*.bcf
 report/*.synctex.gz
+third_party/
