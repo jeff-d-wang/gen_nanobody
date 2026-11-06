@@ -1,0 +1,13 @@
+Metric,Value
+Number of complexes,21.0
+Resolution mean (A),2.5010229695504758
+Resolution median (A),2.7
+Resolution min (A),1.02
+Resolution max (A),3.33
+Nanobody length mean (residues),122.28571428571429
+Full antigen length mean (residues),370.3333333333333
+Cropped antigen length mean (residues),145.47619047619048
+Epitope size mean (residues),21.238095238095237
+Epitope size median (residues),21.0
+Crop fraction mean,0.5848372209927456
+Crop reduction fraction mean,0.41516277900725446
