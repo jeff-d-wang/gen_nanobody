@@ -13,8 +13,11 @@ C (Charlie): data and benchmark.
    midterm: scaling RFantibody across held-out targets, hotspot vs unguided, seed and
    sampling-depth sweeps, structure prediction. None of that can run after Nov 9.
 2. We were spending the expiring resource on the wrong tasks. ProteinMPNN runs fine on a
-   laptop CPU next week. RFantibody and folding are the only things that need PSC, and the
-   old plan marked both "additional if time permits."
+   laptop CPU next week: measured Nov 6, all 21 targets at 16 sequences each took about
+   12 seconds per target, roughly 4 minutes in total, and it never touches the GPU
+   (ProteinMPNN only tests `torch.cuda`, so Apple MPS goes unused anyway). RFantibody and
+   folding are the only things that need PSC, and the old plan marked both "additional if
+   time permits."
 3. CDR sequence recovery doesn't test any of our three research questions. It is a useful
    sanity check that ProteinMPNN is wired up correctly and it stays in the report, but it
    can't be the headline preliminary result.
@@ -25,18 +28,58 @@ New rule for this week: if it needs a GPU, it happens before Nov 9. Everything e
 
 RFantibody bundles base ProteinMPNN with its own CDR-only wrapper (`proteinmpnn -l "H1,H2,H3"`), and its HLT format carries CDR definitions as `REMARK PDBinfo-LABEL` lines derived from Chothia numbering (H1 26-32, H2 52-56, H3 95-102).
 
-So the CDR definition is produced once, by `scripts/util/chothia2HLT.py`, and the
-resulting HLT files feed both A's generation and B's recovery scoring. That script is
-standalone: argparse, numpy and biotite, with no container, no GPU and no hmmer. The
-RFantibody README misnames it `chothia_to_HLT.py`. No CDR columns in `prepped.csv`, and
-no ANARCI.
+So the CDR definition is produced once and the resulting HLT files feed both A's
+generation and B's recovery scoring. One artifact still holds, but the producer turned
+out to be ours rather than RFantibody's. See the next section. (The RFantibody README
+also misnames the script `chothia_to_HLT.py`; the real path is
+`scripts/util/chothia2HLT.py`.)
 
 | Overlap | Resolution |
 |---|---|
 | CDR-only MPNN wrapper | B keeps a standalone one only until A's container is proven, then switches to `proteinmpnn -l H1,H2,H3` |
-| CDR definitions | one source: HLT remarks from `chothia2HLT.py` |
+| CDR definitions | one source: `data/processed/hlt/`, written by `src/evaluate/make_hlt.py`. Not `chothia2HLT.py`, because C's structures are IMGT-numbered |
 | MPNN on *generated* backbones (post-midterm) | A only. It is a stage inside RFantibody, and RQ3 needs both arms from the same stage |
 | RF2 vs Boltz | not duplicate. RF2 is inside the pipeline, so it cannot be the excluded final scorer. That must be Boltz or AF3 |
+
+## A: do not run chothia2HLT.py on C's structures (added Nov 6)
+
+C's `prepped_v2/` and `prepped_mpnn/` are IMGT-numbered, not Chothia. All 21 structures
+put the conserved anchors at IMGT 23, 41 and 104, the heavy chain runs to 128, and 8qf4
+carries CDR3 insertions at 111A to 112C. Chothia stops at 113 and inserts at 100A to
+100K instead. The numbering came in with the deposited mmCIFs; C's prep script uses
+gemmi and preserves whatever it is given, so this is nobody's bug.
+
+`chothia2HLT.py` assumes Chothia and never checks the numbering of its input. Pointed at
+these files it applies H1 26-32, H2 52-56 and H3 95-102 to IMGT positions and writes
+wrong CDR labels with no error, and nothing downstream would catch it. The two
+definitions really do disagree: 26.9 designed positions per target under Chothia against
+31.9 under IMGT.
+
+Use `src/evaluate/make_hlt.py` instead. ANARCI renumbers each heavy chain to Chothia and
+the same `REMARK PDBinfo-LABEL` lines are appended, in a format byte-compatible with
+`chothia2HLT.py`. Coordinates are copied unchanged, because C's `prepped_mpnn/` files
+already fix a real ProteinMPNN bug: the parser misorders insertion codes and read 8qf4's
+CDRH3 as `GKSI` instead of `ISKG`. Use `prepped_mpnn/`, never `prepped_v2/`, for anything
+going through the MPNN parser.
+
+```
+conda create -y -n nbnum -c bioconda -c conda-forge python=3.10 anarci hmmer biopython
+conda run -n nbnum python src/evaluate/make_hlt.py \
+    --pdbs data/processed/prepped_mpnn --out data/processed/hlt \
+    --targets data/processed/targets.csv
+```
+
+ANARCI needs that separate env. Installing it into a conda base env aborts on conda's
+own dependencies and changes nothing. No other stage needs it.
+
+Checked on all 21 targets: CDR3 is flanked by the conserved Cys92 and Trp103 on every
+one, Chothia H3 falls entirely inside C's independently derived IMGT CDRH3 on every one,
+and each output file differs from its input only by the added remarks. 8yj8, 9h77 and
+9q6n carry Arg at Chothia 103 rather than the near-invariant Trp, which is real
+sequence variation and not a numbering error.
+
+`data/processed/hlt/` is gitignored on purpose. Regenerate it rather than committing it,
+so the CDR definition cannot fork into a stale copy.
 
 ## Decide today (Nov 4), before anything else
 
