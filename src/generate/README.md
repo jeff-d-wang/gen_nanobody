@@ -1,7 +1,7 @@
 # RFantibody installation pilot
 
 For the completed 21-target run, output locations, metric definitions, and next
-evaluation steps, read [RFantibody handoff](../../WORK_ARCHIVE_RFantibody_Handoff.md).
+evaluation steps, read [RFantibody handoff](../../WORK_ARCHIVE_RFantibody.md).
 
 ## 21-target benchmark
 
