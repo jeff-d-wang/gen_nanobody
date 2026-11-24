@@ -754,12 +754,15 @@ is a second, independent axis of confidence-vs-reality disagreement to compare i
    every time. Then commit `fold_metrics.py`, `make_fold_inputs.py` and `run_boltz.sh`
    with the first real results; all three are still untracked.
 8. ~~B3.~~ Done Nov 24: `results/interface_metrics.csv`, 252 rows. See the B3 section.
-9. B4 and B5 as written in the Nov 16 addendum. CPU only, laptop, no AWS. B4 is blocked
-   on C's dev set, which does not exist yet (no split file in `data/processed/`), so until
-   then report descriptive distributions only and say so. B5 owes the cluster bootstrap,
-   the clustering rule, and the failure taxonomy; its duplicate count is answered above.
+9. ~~B5.~~ Done Nov 24: `results/b5_paired.csv` and `results/b5_failures.csv`. Clustering
+   rule, duplicate count, cluster bootstrap and failure taxonomy all discharged. See the
+   B5 section.
+10. **B4 is the only B item left, and it is blocked on C.** Threshold calibration needs a
+   dev set to freeze on, and none exists (no split file in `data/processed/`). Until C
+   delivers it, report descriptive distributions only and say so. Ranking must not use
+   `pred_lddt` alone, which the native controls now demonstrate rather than assume.
 
-# Nov 24, later: B2 and B3 are complete. Results and findings.
+# Nov 24, later: B2, B3 and B5 are complete. Results and findings.
 
 Floor signed off by B: `min iptm over 5 samples >= 0.7`, frozen before any design
 number was read. Encoded in `src/evaluate/native_stability.py` (self-check included) and
@@ -967,6 +970,96 @@ The hotspot signal is therefore a property of the generated backbone and its doc
 not of the designed sequence. That is consistent with Finding 1: the sequences do not
 encode the intended interface strongly enough for an independent predictor to recover it.
 It also explains why B5's arm effect on full-epitope recovery is real but small.
+
+## B5 done: paired comparison, cluster bootstrap, failure taxonomy
+
+`src/evaluate/b5_analysis.py` (self-check included). Outputs
+`results/b5_paired.csv` (21 rows, one per target, the unit of analysis) and
+`results/b5_failures.csv` (84 candidates with geometry and failure classes).
+
+Clustering rule, which B5 owed. `data/processed/targets.csv` carries SAbDab's
+`ab_ag_cluster`, and all 21 targets hold distinct values because C kept one
+representative per cluster by resolution. Each target is therefore its own
+antibody/antigen cluster, and a bootstrap over clusters is a bootstrap over targets.
+The script asserts this instead of assuming it, so a future benchmark that puts two
+targets in one cluster fails loudly rather than resampling them as independent.
+
+Sequence duplicates, recomputed here: 84 candidates, 83 distinct. The one duplicate
+is on 8qf4, so that target's arm comparison is partly a self-comparison.
+
+### Finding 5: the arm effect on epitope recovery is real but marginal at n=8
+
+Paired per target, hotspot median minus unguided median:
+
+| scope | pairs | hotspot better | unguided better | tied | sign test |
+|---|---|---|---|---|---|
+| 8 included targets | 8 | 5 | 0 | 3 | p = 0.0625 |
+| all 21 targets | 21 | 13 | 3 | 5 | p = 0.0213 |
+
+On the included targets hotspot is never worse on any target, and the mean paired
+difference is +0.059. Across all 21 the effect holds at +0.064 with a bootstrap 95% CI
+of [+0.007, +0.124] and P(diff <= 0) = 0.013, and that bootstrap is meaningful because
+three targets do favour unguided.
+
+**The bootstrap on the 8 included targets is degenerate and must not be quoted.** With
+5 positive differences, 3 ties and no negatives, a resampled mean can only land at or
+below zero if every draw happens to be a tie, so the reported P(diff <= 0) = 0.000391
+is exactly (3/8)^8, the chance of drawing only ties. It says nothing about the effect
+size. `b5_analysis.py` now prints that warning itself whenever a scope has no negative
+differences, so the number cannot be lifted out of the output by mistake. Report the
+sign test, p = 0.0625, for the included set.
+
+So: suggestive, consistent in direction, and short of conventional significance on the
+targets we trust. The all-21 result is stronger but leans on targets whose native
+control is unreliable. Both belong in the report, with the inclusion status attached.
+
+No arm effect on hotspot contact at all (included 1-0-7, p = 1.0; all 21 5-2-14,
+p = 0.45), which is exactly what Finding 4 predicts: the hotspot signal lives in the
+generated pose, not in the sequence Boltz is given.
+
+### Finding 6: the designs fold correctly and bind in the wrong place
+
+Boltz prediction against A's generated complex, CA atoms. Thresholds are round numbers
+fixed in advance and used only to label failures, never to select candidates.
+
+| measurement | median (8 included) | median (all 84) | max |
+|---|---|---|---|
+| framework RMSD | 0.42 A | 0.40 A | 0.6 A |
+| CDR RMSD, after framework superposition | 1.25 A | 1.35 A | 5.5 A |
+| pose RMSD, antigen-superposed | 43.7 A | 43.7 A | 68.7 A |
+
+| failure class | 8 included (n=32) | all 84 |
+|---|---|---|
+| wrong pose (>10 A) | 94% | 96% |
+| clashes (>0 pairs <2 A) | 41% | 40% |
+| confident but displaced (iptm>=0.7, recovery<0.1) | 47% | 33% |
+| CDR refolding (>3 A) | 3% | 6% |
+| framework distortion (>2 A) | 0% | 0% |
+| no failure class | 1 candidate | 2 candidates |
+
+This is the sharpest result in the project. The fixed-framework invariant holds almost
+perfectly in prediction, at 0.4 A median and never worse than 0.6 A, and the designed
+CDRs are largely reproduced at 1.35 A. Not one candidate shows framework distortion.
+What fails is placement: the nanobody sits a median 44 A from where it was designed to
+bind, on 96% of candidates.
+
+The sequences therefore encode the designed fold and do not encode the designed
+interface. That single sentence explains Finding 1 (7% epitope recovery), Finding 4
+(hotspot conditioning dying between the pose and the sequence) and Finding 5 (a real
+but small arm effect). The failure taxonomy PLAN.md anticipated turns out to be almost
+entirely one class.
+
+Only 2 of 84 candidates carry no failure class, and both are from the hotspot arm:
+8qf4 hotspot nb1 (pose 9.2 A, iptm 0.91, epitope recovery 0.64, on an included target)
+and 9ljj hotspot nb1 (pose 8.0 A, recovery 0.24, on an excluded one).
+
+Cross-validated against A's independent measurement. A recorded
+`target_aligned_antibody_rmsd` on its RF2 predictions; this is the same quantity on a
+different predictor. Medians agree in scale, 43.7 A here against 34.9 A for A, and 77
+of 84 candidates exceed 10 A in both while none is under 10 A in both. The per-candidate
+correlation is weak (r = 0.27), which is expected rather than troubling: two predictors
+that both place the nanobody somewhere wrong need not be wrong in the same direction.
+The agreement that matters is the conclusion, and it is independent of the predictor.
 
 ## Smoke test on the 109 folds, NOT the RQ3 result
 
