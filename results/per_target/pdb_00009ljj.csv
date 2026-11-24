@@ -1,0 +1,6 @@
+target,job,kind,arm,candidate_id,sample,mpnn_global_score,len_nanobody,n_cdr_mutations,plddt_mean,plddt_framework,plddt_cdr,pae_interchain,pae_interchain_min,iptm,ptm,n_native_epitope,n_design_contacts,n_recovered,epitope_recovery,predictor,role
+pdb_00009ljj_H_T,native,native,,,0,,111,0,63.8,91.6,67.5,6.52,2.03,0.830,0.883,21,40,7,0.333,boltz,"final scorer, excluded from generation and selection"
+pdb_00009ljj_H_T,rfab_hotspot_nb0,rfab,hotspot,pdb_00009ljj_hotspot_nb_0_dldesign_0,,,116,,63.0,88.9,70.5,3.99,0.67,0.953,0.945,21,29,1,0.048,boltz,"final scorer, excluded from generation and selection"
+pdb_00009ljj_H_T,rfab_hotspot_nb1,rfab,hotspot,pdb_00009ljj_hotspot_nb_1_dldesign_0,,,116,,62.7,87.7,68.5,4.10,0.96,0.935,0.937,21,31,5,0.238,boltz,"final scorer, excluded from generation and selection"
+pdb_00009ljj_H_T,rfab_unguided_nb0,rfab,unguided,pdb_00009ljj_unguided_nb_0_dldesign_0,,,116,,63.2,89.4,69.0,9.26,1.41,0.911,0.823,21,26,6,0.286,boltz,"final scorer, excluded from generation and selection"
+pdb_00009ljj_H_T,rfab_unguided_nb1,rfab,unguided,pdb_00009ljj_unguided_nb_1_dldesign_0,,,116,,61.6,86.7,63.3,4.63,0.78,0.946,0.924,21,23,4,0.190,boltz,"final scorer, excluded from generation and selection"
