@@ -30,11 +30,16 @@ NANOBODY_CHAIN = "A"  # in Boltz output; the native HLT file uses H
 ANTIGEN_CHAIN = "B"   # in Boltz output; the native HLT file uses T
 
 
-def read_heavy(path, chains):
+def read_heavy(path, chains, atoms=None):
     """{chain: {resseq: (n_atoms, 3) float array}} of heavy-atom coordinates.
 
     Hydrogens are excluded so the cutoff means the same thing as C's, which was
     computed on heavy atoms only.
+
+    `atoms` optionally restricts to named atoms, e.g. ("N", "CA", "C", "O") for a
+    backbone-only comparison. interface_metrics.py needs that because RFantibody's
+    ProteinMPNN output carries no side chains, so only a backbone atom set is
+    comparable across the generated, RF2 and Boltz structures.
     """
     if not os.path.exists(path):
         raise SystemExit("no structure at %s" % path)
@@ -46,8 +51,18 @@ def read_heavy(path, chains):
             ch = ln[21]
             if ch not in out:
                 continue
-            el = ln[76:78].strip() or ln[12:16].strip()[:1]
+            el = ln[76:78].strip()
+            if not el:
+                # No element column: infer from the atom name. PDB puts a numeric
+                # prefix in column 13 for 4-character hydrogen names, so "1HB" is
+                # hydrogen and naive name[:1] would read it as "1" and keep it.
+                # A's RF2 outputs are exactly that case: no element column and 813
+                # of 2813 atoms named 1HA/2HB/3HD1, which leaked 813 hydrogens in
+                # as heavy atoms and inflated both contacts and clashes.
+                el = ln[12:16].strip().lstrip("0123456789")[:1]
             if el.upper() in ("H", "D"):
+                continue
+            if atoms is not None and ln[12:16].strip() not in atoms:
                 continue
             try:
                 res = int(ln[22:26])
@@ -265,6 +280,20 @@ def demo():
         got = contact_antigen_residues(st, "H", "T", 5.0)
         assert got == {1, 2}, got                    # 3.0 and 4.5 are within 5 A
         assert contact_antigen_residues(st, "H", "T", 6.5) == {1, 2, 3}
+
+        # regression: no element column AND a numeric-prefixed hydrogen name.
+        # A's RF2 outputs are written this way, and reading "1HB" as element "1"
+        # let 813 hydrogens per file through as heavy atoms.
+        noelem = ("ATOM      1  CA  ALA H   1       0.000   0.000   0.000  1.00  0.00\n"
+                  "ATOM      2 1HB  ALA T   1       1.000   0.000   0.000  1.00  0.00\n"
+                  "ATOM      3  CB  ALA T   2       3.000   0.000   0.000  1.00  0.00\n"
+                  "END\n")
+        q = os.path.join(d, "noelem.pdb")
+        open(q, "w").write(noelem)
+        st2 = read_heavy(q, "HT")
+        assert sorted(st2["T"]) == [2], "1HB must be read as hydrogen: %s" % sorted(st2["T"])
+        # and the atom filter still selects by name
+        assert sorted(read_heavy(q, "HT", atoms=("CB",))["T"]) == [2]
 
     # recovery arithmetic
     native, design = {1, 2, 3, 4}, {2, 3, 9}

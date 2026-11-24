@@ -315,6 +315,17 @@ Summarize within each target/condition first, then compare as 21 **paired target
 outcomes. Never 84 independent observations. Bootstrap over nanobody/antigen clusters.
 Count sequence duplicates among the 84 and state the clustering rule.
 
+> **Duplicate count, answered Nov 24: 83 distinct sequences of 84.** The single
+> duplicate is on 8qf4, where one hotspot candidate's designed sequence is identical
+> to one unguided candidate's. 8qf4 is an included target, so state that its arm
+> comparison is partly a self-comparison. Nothing else is duplicated, in either
+> direction, on any other target.
+>
+> This also rules out duplicates as the explanation for the three exact arm ties on
+> the included targets (9q6n 0.086 vs 0.086, 9rye and 9ty2 both 0.000 vs 0.000).
+> Those are genuine, and two of them are both arms failing to contact the epitope
+> at all. The clustering rule for the bootstrap is still owed.
+
 Failure taxonomy: framework distortion, CDR refolding, wrong pose, clashes, and the
 confident-but-displaced class above.
 
@@ -742,9 +753,13 @@ is a second, independent axis of confidence-vs-reality disagreement to compare i
    5 Å epitope set from the HLT file before any design number is believed; run it first,
    every time. Then commit `fold_metrics.py`, `make_fold_inputs.py` and `run_boltz.sh`
    with the first real results; all three are still untracked.
-8. B3–B5 as written in the Nov 16 addendum. CPU only, laptop, no AWS.
+8. ~~B3.~~ Done Nov 24: `results/interface_metrics.csv`, 252 rows. See the B3 section.
+9. B4 and B5 as written in the Nov 16 addendum. CPU only, laptop, no AWS. B4 is blocked
+   on C's dev set, which does not exist yet (no split file in `data/processed/`), so until
+   then report descriptive distributions only and say so. B5 owes the cluster bootstrap,
+   the clustering rule, and the failure taxonomy; its duplicate count is answered above.
 
-# Nov 24, later: B2 is complete. Phase 7 results.
+# Nov 24, later: B2 and B3 are complete. Results and findings.
 
 Floor signed off by B: `min iptm over 5 samples >= 0.7`, frozen before any design
 number was read. Encoded in `src/evaluate/native_stability.py` (self-check included) and
@@ -860,6 +875,98 @@ to both findings, which is why one got stronger and one got weaker.
 A sign test is not the prescribed analysis. B5 still owes the bootstrap over
 nanobody/antigen clusters, and with 8 pairs the power is thin. Report as promising and
 underpowered, never as established.
+
+## B3 done: interface and geometry on all three structure sets
+
+`src/evaluate/interface_metrics.py` (self-check included), output
+`results/interface_metrics.csv`: 252 rows, 84 candidates x 3 structure sets, no
+duplicates. The three sets are A's ProteinMPNN output in its generated pose
+("generated"), A's RF2 prediction ("rf2"), and B's Boltz prediction from sequence
+alone ("boltz").
+
+### Two measurement decisions that the data forced
+
+**The generated complex has no side chains.** A's ProteinMPNN output carries exactly
+N, CA, C, O. RF2 and Boltz carry full side chains. So every contact count is computed
+twice, on backbone atoms only (comparable across all three sets) and on all heavy atoms
+(comparable between rf2 and boltz, and matching C's epitope definition). The gap is not
+cosmetic: RF2's median full-epitope recovery reads 0.333 on backbone and 0.614 on heavy
+atoms. `has_sidechains` marks which rows support the heavy-atom reading. The clash count
+for "generated" is likewise not comparable to the other two: fewer atoms, fewer chances
+to overlap.
+
+**A's files continue antigen numbering after the nanobody.** Chain T runs 117..183 where
+Boltz numbers chain B 1..67, so A's residues are shifted back by an offset read from the
+structure and then checked against the manifest's antigen length and contiguity. Observed
+offsets are exactly 116 for every A file and 0 for every Boltz file. A silently wrong
+offset would move every lookup onto the wrong residue and still produce plausible numbers,
+so the self-check covers it directly.
+
+Rosetta InterfaceAnalyzer is deliberately absent, which PLAN.md permits. Contacts, clashes
+and buried area cover the same ground without a licence or a build.
+
+### Parser bug found and fixed; B2 results unaffected
+
+`fold_metrics.read_heavy` was keeping hydrogens. RF2's PDBs have an empty element column,
+so the parser fell back to the first character of the atom name, and PDB puts a numeric
+prefix in column 13 for 4-character hydrogen names: "1HB" read as element "1". Per RF2
+file that admitted 813 hydrogens of 2813 atoms as heavy atoms, inflating contacts and
+clashes (one test candidate's clash count fell from 438 to 199 after the fix).
+
+Checked on all three input types: Boltz outputs and C's HLT files both populate the
+element column and contain zero hydrogens, and A's ProteinMPNN output has no hydrogens
+either. Only RF2 triggers it, and RF2 was not scored in B2, so **no B2 number changes**.
+Fixed by stripping leading digits before reading the element, with a regression assertion
+in `fold_metrics.py --demo` built from a synthetic no-element-column "1HB" line.
+
+### Finding 3: every RF2 interface is physically invalid, and Boltz's are not
+
+Inter-chain heavy-atom pairs closer than 2.0 A:
+
+| set | n | median | mean | max | with >0 clashes |
+|---|---|---|---|---|---|
+| rf2 | 84 | 96 | 131 | 711 | **84 of 84** |
+| boltz | 84 | 0 | 0.5 | 4 | 34 of 84 |
+| generated (backbone only, not comparable) | 84 | 0 | 0.0 | 1 | 4 of 84 |
+
+Not a parsing artifact. Heavy-atom counts are identical between the rf2 and boltz files
+for the same candidate (1445, 2060, 1698, 3228, 2006 on the five spot-checked), there are
+no duplicate coordinates and no altlocs, and RF2's minimum inter-chain distance runs
+0.30 to 0.57 A against Boltz's 1.86 to 2.29 A. The chains interpenetrate. No RF2 candidate
+is clash-free; 50 of 84 Boltz predictions are, and Boltz's worst case is 4 marginal
+contacts just under 2.0 A rather than overlap.
+
+**This flatters the designs, which is the point.** RF2 reports median full-epitope
+recovery of 0.614 on heavy atoms against Boltz's 0.086, because interpenetrating chains
+"contact" everything near them. Its buried area tail is inflated the same way (max
+2173 A^2 against Boltz's 1404), so BSA is not interpretable for rf2 at all. PLAN.md
+already excluded RF2 as the final scorer because it sits inside the pipeline. This is an
+independent, physical reason: its geometry is not valid, so any interface metric computed
+on it reads high for the wrong reason.
+
+### Finding 4: hotspot conditioning works at generation and does not survive
+
+Hotspot recovery, backbone atoms, denominator 4 hotspots per target:
+
+| set | arm | n | median | mean | hitting >=1 |
+|---|---|---|---|---|---|
+| generated | hotspot | 42 | 0.250 | 0.268 | **74%** |
+| generated | unguided | 42 | 0.000 | 0.071 | **21%** |
+| rf2 | hotspot | 42 | 0.250 | 0.339 | 76% |
+| rf2 | unguided | 42 | 0.500 | 0.417 | 79% |
+| boltz | hotspot | 42 | 0.000 | 0.083 | 24% |
+| boltz | unguided | 42 | 0.000 | 0.065 | 19% |
+
+In the generated pose the conditioning plainly works: 74% of hotspot-arm candidates touch
+at least one hotspot against 21% of unguided-arm candidates. Through RF2 the separation is
+gone, and the unguided arm even reads higher, which given Finding 3 is what an invalid
+geometry would do. Under independent prediction from sequence alone both arms sit near
+zero, 24% against 19%.
+
+The hotspot signal is therefore a property of the generated backbone and its docked pose,
+not of the designed sequence. That is consistent with Finding 1: the sequences do not
+encode the intended interface strongly enough for an independent predictor to recover it.
+It also explains why B5's arm effect on full-epitope recovery is real but small.
 
 ## Smoke test on the 109 folds, NOT the RQ3 result
 
