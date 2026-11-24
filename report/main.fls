@@ -1,0 +1,8 @@
+PWD /Users/jeffwang/VSCode_Workspace/gen_nanobody/report
+INPUT /Users/jeffwang/Library/TinyTeX/texmf.cnf
+INPUT /Users/jeffwang/Library/TinyTeX/texmf-dist/web2c/texmf.cnf
+INPUT /Users/jeffwang/Library/TinyTeX/texmf-var/web2c/pdftex/pdflatex.fmt
+INPUT /Users/jeffwang/VSCode_Workspace/gen_nanobody/report/main.tex
+OUTPUT main.log
+INPUT ./preprint.cls
+INPUT preprint.cls
