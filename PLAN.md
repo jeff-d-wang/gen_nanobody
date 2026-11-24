@@ -2,7 +2,7 @@
 
 > **Start at the Nov 24 addendum at the end of this file.** It is the current state:
 > the EC2 box, the runbook, what is done and what is next. The Nov 16 addendum before
-> it still defines the *work* (B0–B5) but its compute section is superseded. PSC access
+> it still defines the *work* (B0-B5) but its compute section is superseded. PSC access
 > is gone; GPU work moved to AWS and B owns it. Everything in this first section is kept
 > only as the record of what was decided and why.
 
@@ -204,7 +204,7 @@ An unverified transfer discovered on Nov 10 is unrecoverable.
 
 # Nov 16 addendum: no PSC, AWS instead. B owns the compute.
 
-Supersedes every compute assumption above. The Nov 4–9 schedule is history; keep it
+Supersedes every compute assumption above. The Nov 4-9 schedule is history; keep it
 for the record. PSC is gone and the archive checklist was never verified against a
 second machine, so that is now a prerequisite, not a formality.
 
@@ -216,11 +216,11 @@ second machine, so that is now a prerequisite, not a formality.
 | A finished a 21-target RFantibody run on a local RTX 3060 Ti (`origin/RFantibody`, Nov 8) | 84 candidates exist. Generation is no longer the bottleneck; evaluation is |
 | A's 84 structures are gitignored | Scripts and 2 summary CSVs are on the branch. The structures must arrive by file transfer. Nothing B owns can start on real candidates until they do |
 | RF2 ran *inside* A's pipeline | RF2 can never be the independent final scorer. Non-negotiable #1 is now entirely B's: fold from sequence only, no template, no designed pose |
-| B has $250 AWS credit, no PSC | Boltz moves to one EC2 GPU instance. See the compute section |
+| PSC is gone | Boltz moves to one EC2 GPU instance that B owns. See the compute section |
 
 ## B's work, in dependency order
 
-### B0. Unblock: get A's run directory (do this first, it gates B2–B5)
+### B0. Unblock: get A's run directory (do this first, it gates B2-B5)
 
 Ask A for `runs/rfab_benchmark_1ce3344e4822/` as an archive, through shared storage,
 not Git. Then, per A's handoff:
@@ -248,7 +248,7 @@ python3 src/evaluate/fold_metrics.py report  --target pdb_00008qf4 \
 ```
 
 `validate` reproduces C's 5 Å epitope set from the HLT file before any design number is
-believed. Both scripts are still untracked — commit them with the first real results.
+believed. Both scripts are still untracked; commit them with the first real results.
 
 ### B2. Independent final scoring of A's 84 candidates (the non-negotiable)
 
@@ -258,7 +258,7 @@ Sequences come from `RUN/designed_sequences.fasta`; antigen sequences from the s
 `parsed.jsonl` route `make_fold_inputs.py` already uses, so the antigen is byte-identical
 across every fold and contact recovery stays a set comparison on chain-T indices.
 
-**Inputs built Nov 16: 109 jobs staged in `runs/boltz_in/`** — 21 native controls, 84
+**Inputs built Nov 16: 109 jobs staged in `runs/boltz_in/`.** 21 native controls, 84
 RFantibody candidates, and 8qf4's 4 MPNN redesigns, merged into one manifest per target
 so a single `fold_metrics.py report` covers all three kinds under the same scorer. Run
 `src/evaluate/run_boltz.sh` from the input root. Nothing is left to prepare but the GPU.
@@ -266,7 +266,7 @@ so a single `fold_metrics.py report` covers all three kinds under the same score
 Checked while building, all 84 candidates: every `designed_sequences.fasta` record matches
 the chain-H sequence of its accepted ProteinMPNN output (so candidate identity is sound,
 and the accepted attempt is read from `state.json`, never guessed), and stripping each
-candidate's own CDR positions leaves one shared 95-aa framework string — the fixed-framework
+candidate's own CDR positions leaves one shared 95-aa framework string, the fixed-framework
 invariant, confirmed without any alignment. 95 + 21 designed positions = 116 aa.
 
 B's own MPNN redesigns for the other 20 targets are deliberately not staged. Add them
@@ -275,8 +275,8 @@ when a question needs them, not before.
 Verified Nov 16, all 21 targets: the chain-T sequence in A's `RUN/inputs/targets/*_T.pdb`
 is byte-identical to `seq_chain_T` in B's `runs/mpnn_seed37/parsed.jsonl`, numbered 1..N
 contiguously. So `fold_metrics.py`'s core assumption survives onto A's candidates
-unchanged — antigen residue *i* is antigen residue *i*, contact recovery stays a set
-comparison on T indices, no structural alignment anywhere — and C's epitope sets and A's
+unchanged (antigen residue *i* is antigen residue *i*, contact recovery stays a set
+comparison on T indices, no structural alignment anywhere), and C's epitope sets and A's
 hotspot lists in T numbering apply directly. This is the invariant that would otherwise
 have forced a rewrite of the metrics code. Re-run the check if either side regenerates.
 
@@ -285,7 +285,7 @@ sets the GPU memory floor below, not the median target.
 
 MSA cost note: the 21 antigens are identical across arms and designs, so fetch 21 antigen
 MSAs once and reuse them. Do not send 105 queries to the public MSA server. Nanobody
-chains go single-sequence — the server's hits for a designed VHH are framework noise.
+chains go single-sequence: the server's hits for a designed VHH are framework noise.
 
 ### B3. Interface and geometry evaluation on both structure sets
 
@@ -295,7 +295,7 @@ cutoff and the denominator, and keep the three counts separate), steric clashes,
 area, interface geometry.
 
 A's own numbers already flag where the interesting failures are: that first row has
-`pred_lddt` 0.87 with `target_aligned_antibody_rmsd` 36.3 Å — a confident fold that left
+`pred_lddt` 0.87 with `target_aligned_antibody_rmsd` 36.3 Å, a confident fold that left
 the epitope entirely. Confidence-vs-placement disagreement is the headline failure mode,
 not a footnote.
 
@@ -331,60 +331,21 @@ confident-but-displaced class above.
 
 ## Compute: one EC2 GPU instance, B owns it
 
-> Superseded by the Nov 24 addendum, which records the instance as actually built and
-> the measured costs. The quota reasoning below is still the explanation of why; the
-> approved quota turned out to be 8 vCPU on-demand and 4 spot, not the 16 requested.
-
-Feasible, with room to spare. The only GPU work left in B's queue is Boltz folding of
-roughly 105–200 complexes of about 190 residues each.
-
-| Item | Estimate |
-|---|---|
-| Per fold, 1 diffusion sample, 3 recycles, ~190 residues | 2–5 min |
-| 105 folds + retries | ~6–12 GPU-hours |
-| Instance | `g5.xlarge`, A10G 24 GB, ≈$1.0/hr on-demand in us-east-1 (confirm in console) |
-| Folding cost | ~$10–15. Under $5 on spot |
-| Whole-project ceiling if B2+B3 are rerun twice | well under $50 of $250 |
-
-Credit is not the constraint. Three things actually are:
-
-1. **GPU quota.** A new AWS account has an on-demand G-instance vCPU quota of 0.
-   In Service Quotas → Amazon EC2, raise **Running On-Demand G and VT instances**
-   (code `L-DB2E81BA`), measured in **vCPUs**, not instances. `g5.xlarge` is 4 vCPUs,
-   so 4 permits exactly one at a time; **ask for 16** to allow a parallel batch or a
-   bigger instance later, since a second request costs another day and a quota is a
-   cap, not a reservation. Spot is a separate quota (**All G and VT Spot Instance
-   Requests**, `L-3819A6DF`) — request it in the same sitting. Both are **per region**,
-   so file them in the region you will actually launch in. Do this **today**: approval
-   takes hours to a couple of days and nothing else can start until it lands.
-2. **Credit terms.** Check Billing → Credits for expiry and service restrictions
-   before planning around the $250.
-3. **A stopped instance still bills EBS.** Keep the root volume at 100 GB (~$8/mo),
-   `stop` the instance between sessions, `terminate` and delete the volume when B2 is
-   done. Set an AWS Budget alert at $50. A GPU instance left running over a weekend is
-   the only realistic way to lose this credit.
-
-Setup, in order: quota request → Deep Learning AMI (Ubuntu 22.04, PyTorch) so the CUDA
-driver is already correct → `pip install boltz` → keep `BOLTZ_CACHE` on the root volume →
-run the preflight GPU check lifted from `psc_boltz.sbatch` before spending GPU time →
-batch folds under `nohup`, native first.
-
-Claude can drive the instance over SSH from this repo (jobs backgrounded, polled), so the
-workflow is the same as the sbatch one minus the scheduler: security group open on port 22
-to B's IP only, or SSM Session Manager if no open port is preferred. Keys and credentials
-stay on B's machine.
+> Superseded by the Nov 24 addendum, which records the instance as actually built.
+> Kept only as the decision: PSC is gone, so the ~105 Boltz folds (about 190 residues
+> each, a few minutes apiece) run on a single `g5.xlarge` (A10G 24 GB) that B owns and
+> drives over SSH, security group open on port 22 to B's IP only, keys staying on B's
+> machine. GPU quota is the real gate: a new account starts at 0 G-instance vCPUs, the
+> quota is counted in vCPUs and is per region, so file the on-demand (`L-DB2E81BA`) and
+> spot (`L-3819A6DF`) requests together, in the region you will actually launch in,
+> before anything else. Approval takes hours to days.
 
 Done Nov 16: `src/evaluate/run_boltz.sh` is the plain-bash successor to
 `psc_boltz.sbatch`. The Slurm directives were the only part that died. The GPU preflight,
 `--output_format pdb`, native-first ordering and the resume check all carried over, and
-the resume check matters more on EC2 than it did on Slurm — it is what makes a dropped
+the resume check matters more on EC2 than it did on Slurm, because it is what makes a dropped
 ssh session, an overnight interruption or a spot reclaim survivable. The sbatch file is
 kept, marked superseded, as the record of the PSC config.
-
-Open: populating the cached antigen MSAs. `--msa cached` and the runner's missing-a3m
-abort are in place, but Boltz's on-disk a3m layout is not guessed in code — fold the
-first native with `MSA=server`, look at what Boltz wrote, then wire the 21 reused files.
-Until then `MSA=server` works and costs 105 server queries instead of 21.
 
 ## Still true, and still binding
 
@@ -395,7 +356,7 @@ keeps #3 honest. In-silico success is still not binding.
 
 # Nov 24 addendum: the EC2 box is live. Runbook, state, and one real problem.
 
-Supersedes the compute section of the Nov 16 addendum. The *work* items (B2–B5) are
+Supersedes the compute section of the Nov 16 addendum. The *work* items (B2-B5) are
 unchanged; what changes is that the instance exists, the MSA open item is closed, and
 the native controls have raised a question that has to be answered before any design
 number is interpreted.
@@ -410,7 +371,7 @@ number is interpreted.
 | GPU environment | Verified working. Native 8qf4 folded: iptm 0.940, complex_plddt 0.968 |
 | 21 native controls | Folded (one per target), MSAs harvested |
 | 88 design folds | Not started. This is the next action |
-| B3–B5 | Not started, CPU-only, no AWS needed |
+| B3-B5 | Not started, CPU-only, no AWS needed |
 
 ## The instance
 
@@ -532,7 +493,7 @@ Complete, all 21 targets. Harvest: 20 folded, 0 failed, 1 already done. 9 clear 
 > single-sample confidence, and because `runs/boltz_out/` still holds these folds.
 
 MSA depth does not explain it. The shallowest MSA in the set, 9yc3 at 42 rows,
-reaches 0.581 — better than 8yj8 at 10804 rows (0.273) and 9rxi at 12060 rows (0.446).
+reaches 0.581, better than 8yj8 at 10804 rows (0.273) and 9rxi at 12060 rows (0.446).
 9dc3, our largest antigen at 300 aa, reaches only 0.230. Whatever drives this, it is a
 property of the complex, not of how much coevolutionary signal we fed it. Do not "fix"
 the weak targets by chasing deeper MSAs.
@@ -544,7 +505,7 @@ while interface confidence is low, and vice versa. This is the same
 confidence-vs-placement disagreement A already saw in RF2 (`pred_lddt` 0.87 with
 `target_aligned_antibody_rmsd` 36.3 Å), now reproduced by an independent predictor on
 *native* complexes where the right answer is known. It is direct empirical support for
-the existing rule that ranking must never use `pred_lddt` alone — B4's constraint is no
+the existing rule that ranking must never use `pred_lddt` alone; B4's constraint is no
 longer just a precaution.
 What must be decided before looking at a single design number. Native control
 quality is a property of the *target and the predictor*, not of any candidate, so
@@ -583,18 +544,18 @@ diffusion sample is noise. 9ljj moves from the worst band to clearing 0.7 outrig
 Three others roughly double and still land below 0.5, so the stratification does not
 vanish, but it cannot be read off 1-sample numbers.
 
-Five samples are nearly free. 55–92 s per target for 5, against ~75 s for 1: the
+Five samples are nearly free. 55-92 s per target for 5, against ~75 s for 1: the
 trunk pass (MSA processing, pair representation) dominates and runs once regardless.
 There is no reason to run 1 sample anywhere in this project.
 
 Consequences, binding:
 
 1. The 21-target 1-sample table above is **not a basis for any threshold**. Re-run all
-   21 natives at 5 samples before the floor is set (~30 min, well under $1).
+   21 natives at 5 samples before the floor is set (~30 min).
 2. Run the 88 design folds at 5 samples too. At 1 sample every design iptm carries a
    ±0.3 uncertainty, which makes B5's paired target-level comparisons meaningless.
 3. Use `model_0` as the per-job value. That is Boltz's own composite ranking and is
-   usually, but not always, the iptm argmax — on 9npt, model_0 is 0.377 while model_2
+   usually, but not always, the iptm argmax: on 9npt, model_0 is 0.377 while model_2
    reaches 0.508. Taking the iptm argmax across samples would mean selecting on the very
    statistic being reported; `model_0` is pre-specified and avoids that. Record n=5 for
    every job so the selection pressure is identical everywhere.
@@ -641,8 +602,8 @@ coin flip, with nothing in between.
 > **Superseded.** This condition was adopted, then *extended* with
 > `native epitope recovery >= 0.5` once the report revealed that 9g3e folds
 > confidently at the wrong interface. The rule in force is in "The inclusion rule,
-> as adopted" below, and it gives 8 targets, not 9. The reasoning here still
-> stands as the justification for the iptm half.
+> as adopted" below, and it gives 8 targets, not 9. The reasoning here is still the
+> justification for the iptm half.
 
 Five independently reasonable criteria pick out exactly the same 9 targets:
 
@@ -709,7 +670,7 @@ is a second, independent axis of confidence-vs-reality disagreement to compare i
 3. ~~Freeze the native floor.~~ Done Nov 24, then amended: the rule in force is
    `min of 5 iptm >= 0.7` AND `native epitope recovery >= 0.5`, giving n = 8.
    See "The inclusion rule, as adopted". Original note: `min of 5 ≥ 0.7`, n = 9. Five
-   criteria agree on the same 9 targets, so this is close to forced by the data — but it
+   criteria agree on the same 9 targets, so this is close to forced by the data, but it
    is still B's call to sign off, and it must be signed off before any design number is
    *read*. Design folds may be *computed* first: folding leaks nothing into a floor
    defined purely on natives.
@@ -738,13 +699,10 @@ is a second, independent axis of confidence-vs-reality disagreement to compare i
      stops if `InstanceInitiatedShutdownBehavior` is `stop`, which is the default but
      cannot be read from inside the instance. Nothing is lost either way: results are
      verified locally and `msa/` removes the need to re-query, but know which it is.
-   - Billing → Credits: expiry and service restrictions on the $250.
-   - Whether the $50 Budget alert actually exists.
-   - `terminate` and delete the 45 GB volume once B3 is done. A stopped instance
-     still bills EBS at ~$3.60/mo, and termination does not always take the root volume.
+   - `terminate` and delete the 45 GB volume once B3 is done; termination does not
+     always take the root volume with it.
 
    Instance for reference: `i-0f7ecdbdc88435d6e`, g5.xlarge, us-east-2a, on-demand.
-   Total compute spend across the whole session was roughly $4–5.
 7. ~~`fold_metrics.py validate` then `report`.~~ Done Nov 24: validate passes on
    21/21, report merged to `results/end_to_end_metrics.csv`. See the Phase 7 findings
    section. Note `cmd_report` opens `--out` with mode "w", so it overwrites, so loop
@@ -795,8 +753,8 @@ iptm and placement are decoupled in both directions:
 
 | Target | min iptm | native epitope recovery | excluded by |
 |---|---|---|---|
-| pdb_00009g3e | 0.904 | 0.056 | recovery only — confident at the wrong interface |
-| pdb_00009g2g | 0.481 | 0.917 | iptm only — right place, unreliably |
+| pdb_00009g3e | 0.904 | 0.056 | recovery only (confident at the wrong interface) |
+| pdb_00009g2g | 0.481 | 0.917 | iptm only (right place, unreliably) |
 | pdb_00008rwf | 0.236 | 0.733 | iptm only |
 | pdb_00009rmk | 0.150 | 0.607 | iptm only |
 
@@ -837,7 +795,7 @@ RFantibody candidates largely fail to reproduce the intended interface.
 
 The amendment strengthened this result by removing a false positive. Under the
 iptm-only rule the count was 2 of 9, and the extra "win" was 9g3e, where the candidate
-scored 0.167 against a native of 0.056 — a design beating a control that was itself
+scored 0.167 against a native of 0.056, a design beating a control that was itself
 broken. Excluding targets whose native misses its own epitope removes exactly that
 artifact.
 
@@ -862,7 +820,7 @@ Median epitope recovery per arm, paired within each included target:
 | pdb_00009ty2 | 0.000 | 0.000 | = |
 
 **hotspot better on 5, unguided better on 0, tied on 3.** Hotspot is never worse on any
-target, and where it wins the margin is large — 3.7x on 9b71, ~2x on 9e7l and 9min.
+target, and where it wins the margin is large: 3.7x on 9b71, ~2x on 9e7l and 9min.
 
 Meanwhile the pooled iptm view shows nothing at all (hotspot 0.856 vs unguided 0.858).
 The two measurements agree with the mechanism: hotspots steer *where* the nanobody binds,
@@ -1084,24 +1042,22 @@ Three things to carry into B5 as hypotheses, not findings:
    artifact of the unstable targets dragging the native median down, and it is the
    clearest demonstration of why the stratification is not optional.
 
-## Cost and time, actual vs estimated
+## Time and footprint, actual vs estimated
 
 | | Nov 16 estimate | Measured |
 |---|---|---|
-| Per fold | 2–5 min | ~22 s GPU, ~75 s wall (each job is its own `boltz predict`, so each pays model load) |
-| 109 folds | 6–12 GPU-hours | ~2.5 h |
-| Folding cost | $10–15 | ~$2.50 at $1.006/hr on-demand |
+| Per fold | 2-5 min | ~22 s GPU, ~75 s wall (each job is its own `boltz predict`, so each pays model load) |
+| 109 folds | 6-12 GPU-hours | ~2.5 h |
 | Boltz cache | ~3 GB assumed | 7.6 GB (2.2 ckpt + 2.0 aff + 1.8 mols + 1.8 mols.tar) |
 
-Credit was never the constraint and is even less of one now. `rm ~/.boltz/mols.tar`
-reclaims 1.8 GB if the 43 GB volume gets tight.
+`rm ~/.boltz/mols.tar` reclaims 1.8 GB if the 43 GB volume gets tight.
 
 ## Traps that cost time, so they are not re-paid
 
 - `python3-dev`. See above. Reads as a CUDA failure, is not one.
 - The MSA guard is global. `run_boltz.sh` scans all `*/*.yaml` for missing MSAs
   regardless of `ONLY=`, so you cannot run one target until all 21 CSVs exist. Correct
-  for the batch, awkward for one-offs — call `boltz predict` directly for those.
+  for the batch, awkward for one-offs, so call `boltz predict` directly for those.
 - `pgrep -f "boltz predict"` self-matches. A polling loop whose own ssh command line
   contains that string sees itself and reports RUNNING forever. Use a pidfile
   (`echo $! > /tmp/boltz.pid`, then `kill -0 $(cat ...)`).
