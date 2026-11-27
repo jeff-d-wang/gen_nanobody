@@ -1,0 +1,4 @@
+scope,completed_conditions,generated_backbones,designed_sequence_records,unique_heavy_sequences,audited_rf2_predictions,computational_filter_pass_candidates,computational_filter_status,model_process_wall_seconds,model_process_wall_hours,attempts,unaccepted_attempts,unaccepted_attempt_wall_seconds,rfdiffusion_wall_seconds,proteinmpnn_wall_seconds,rf2_wall_seconds
+all,42,84,84,83,84,,not_defined,15634.59,4.34294167,127,1,177.09,12003.82,973.44,2657.33
+hotspot,21,42,42,42,42,,not_defined,7760.41,2.15566944,63,0,0,5938.94,487.99,1333.48
+unguided,21,42,42,42,42,,not_defined,7874.18,2.18727222,64,1,177.09,6064.88,485.45,1323.85

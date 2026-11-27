@@ -1,0 +1,247 @@
+{
+  "source_commit": "44d4b710c6ec9530113ce106d41f4ac0ba4baefa",
+  "report_date": "2026-11-26",
+  "files": [
+    {
+      "path": "A2_AVIDA_IMPLEMENTATION_REPORT.md",
+      "bytes": 17776,
+      "sha256": "ed6d253d47f6e720f40e7e634e5ee51c45ff8448f7590ee3fb759dba14ad2e61"
+    },
+    {
+      "path": "configs/avida_protocol.json",
+      "bytes": 1183,
+      "sha256": "64d2076873bb8e5983575904dd71dc6f87a4e3e7b28997cdcdfc201da7aeda16"
+    },
+    {
+      "path": "data/processed/avida_pairs.csv.gz",
+      "bytes": 43379049,
+      "sha256": "3688086fa5c9b12d04109196e33418c8d3078382fecf380c17514be98b9aba5f"
+    },
+    {
+      "path": "data/processed/avida_sequence_predictions.csv.gz",
+      "bytes": 8109184,
+      "sha256": "bcbaf877253b7a960cfffdfd854f5f683bcb9cbd5c4498904dd354ea5ccecd04"
+    },
+    {
+      "path": "data/processed/avida_vhh_splits.csv.gz",
+      "bytes": 1490170,
+      "sha256": "e0c65cd6bef7c20a5e5ae13e88a3c587318b1ab2fcd5602c6e027a7c908eab44"
+    },
+    {
+      "path": "data/raw/avida_hil6/cd783d573e015f83364e42287810ad597850aeed/AVIDa-hIL6.csv",
+      "bytes": 104655792,
+      "sha256": "917d90f111d759edc3440f577458d42ef89ff0315b186d6c266c120143b20cde"
+    },
+    {
+      "path": "data/raw/avida_hil6/cd783d573e015f83364e42287810ad597850aeed/README.md",
+      "bytes": 2467,
+      "sha256": "fec4c7e1eaff265cd666abc4d34d4e747bf9deda3200b5f58978b6b0201790cc"
+    },
+    {
+      "path": "data/raw/avida_hil6/cd783d573e015f83364e42287810ad597850aeed/antigen_sequences.csv",
+      "bytes": 7133,
+      "sha256": "8f023581932e626ba1e2da4f7f861b998b8fcb7516aedb785d831f8c36984e68"
+    },
+    {
+      "path": "data/raw/avida_pilot/1ALU.pdb",
+      "bytes": 154548,
+      "sha256": "37a666e3b62dca0dd61a029c430f936800efcb872f734655429816bfb9f845db"
+    },
+    {
+      "path": "results/evaluation/avida_baseline_run.json",
+      "bytes": 1655,
+      "sha256": "c99fe3711fb02a0a9763d5fdaca3c1d67b023cad0771b79350513dce1c73f30b"
+    },
+    {
+      "path": "results/evaluation/avida_class_balance.csv",
+      "bytes": 8034,
+      "sha256": "834c6a94de9b008a5603bad30c71b8a1603989bbe3d80e395df2954c9ea59f3a"
+    },
+    {
+      "path": "results/evaluation/avida_curation_audit.json",
+      "bytes": 1029,
+      "sha256": "0653ec1b128c886ca10c62aff245973e9d2265342d061fbd4fa7bf59735f2269"
+    },
+    {
+      "path": "results/evaluation/avida_feasibility.csv",
+      "bytes": 1328,
+      "sha256": "37d93962c71fc2d760384b5efeaebf350cc696f8d789f7e1109798f0f73637a3"
+    },
+    {
+      "path": "results/evaluation/avida_feasibility_decision.json",
+      "bytes": 379,
+      "sha256": "fe53d5e596e167cc90c8d32db500b4668c5499a2f4efb2119d8d4f84db37d4cf"
+    },
+    {
+      "path": "results/evaluation/avida_pilot_pairs.csv",
+      "bytes": 2451,
+      "sha256": "84f5a7c052bd5f6f3e7d210cbbd6f793f7ceb35bede2fb098841134774e53042"
+    },
+    {
+      "path": "results/evaluation/avida_pilot_preflight.json",
+      "bytes": 1256,
+      "sha256": "63ee882da586c859fa4905123edc029bb835bac9b0681cb71e0f6f98daa97326"
+    },
+    {
+      "path": "results/evaluation/avida_sequence_baseline_metrics.csv",
+      "bytes": 1261,
+      "sha256": "8110f1c1bf6139a69b09dd407c45e9ceb02100256c8fa6d6a7c1781f2324b235"
+    },
+    {
+      "path": "results/evaluation/avida_sequence_baseline_pr.pdf",
+      "bytes": 19905,
+      "sha256": "77c29ddd82ce00726a6ad78c8aa4246ac87b6aef91b2b9212a82d7d64359867e"
+    },
+    {
+      "path": "results/evaluation/avida_sequence_baseline_pr.png",
+      "bytes": 77185,
+      "sha256": "7eec55c627992a7d8ac96761acd23a1108fa38bbfd7f36c435899b9b8960191d"
+    },
+    {
+      "path": "results/evaluation/avida_source_manifest.json",
+      "bytes": 1328,
+      "sha256": "006f58d879707e0a090e1b7c1ae31ba64a8b7ba79ec6679dad552bee942c1d2c"
+    },
+    {
+      "path": "runs/avida_baseline/features.json",
+      "bytes": 101682,
+      "sha256": "a6190506c2dd4f6c457bfcaefca7d95205571afd91cd1f0787f4b64599dbba56"
+    },
+    {
+      "path": "runs/avida_baseline/model.npz",
+      "bytes": 44801,
+      "sha256": "fa41cc58ad91484db9c77f132b46f30faaa448731b060cf55c91366c40621f98"
+    },
+    {
+      "path": "runs/avida_pilot/avida_0019b29612c4ee7a0fbf6266/attempt.json",
+      "bytes": 1252,
+      "sha256": "5139d2fb7cc7189a77c29dc58880b1a73ffeb016b1d722e738bdb41b37dad056"
+    },
+    {
+      "path": "runs/avida_pilot/avida_0019b29612c4ee7a0fbf6266/input.json",
+      "bytes": 200154,
+      "sha256": "659f22dd231ac26c7b11598355a5da5e77f8d8c382ae694ec3e919959dc72c25"
+    },
+    {
+      "path": "runs/avida_pilot/avida_0019b29612c4ee7a0fbf6266/model.log",
+      "bytes": 1718,
+      "sha256": "0681b8beecd12a986a54c56affee3f9013101bd18dbbf12ca75635403521f633"
+    },
+    {
+      "path": "runs/avida_pilot/avida_0019b29612c4ee7a0fbf6266/outputs/avida_0019b29612c4ee7a0fbf6266_best.pdb",
+      "bytes": 382374,
+      "sha256": "62007daa47d0bcef4e5c38b773b98e1a314d492f3fbf662d57fecc8fa495ed88"
+    },
+    {
+      "path": "runs/avida_pilot/avida_00d407f8924dcf95bc7c92f7/attempt.json",
+      "bytes": 1250,
+      "sha256": "77b9dd9de7b38d500072c0f70351fb81438eec31cee3d99ce17b9f586f753d70"
+    },
+    {
+      "path": "runs/avida_pilot/avida_00d407f8924dcf95bc7c92f7/input.json",
+      "bytes": 200148,
+      "sha256": "dfce1d57803805c29376de3fb0ff1f134fc22c0d516cbe4ed0fec89177f24719"
+    },
+    {
+      "path": "runs/avida_pilot/avida_00d407f8924dcf95bc7c92f7/model.log",
+      "bytes": 1718,
+      "sha256": "7385b52f197c7979d3cfd91e065221904fca6dd9a7b1ac7fab89a499a37d90a7"
+    },
+    {
+      "path": "runs/avida_pilot/avida_00d407f8924dcf95bc7c92f7/outputs/avida_00d407f8924dcf95bc7c92f7_best.pdb",
+      "bytes": 376143,
+      "sha256": "4e37f880cca95be97f04bbd5823df54e2c9b0375451855c5054f8aa083a1a8b6"
+    },
+    {
+      "path": "runs/avida_pilot/avida_1db17ffb76b6c06fe0935d79/attempt.json",
+      "bytes": 1250,
+      "sha256": "1a7fa024480e44b4b94edb45a8eba1204871a94e2c1a23cc8e8571c2df44392b"
+    },
+    {
+      "path": "runs/avida_pilot/avida_1db17ffb76b6c06fe0935d79/input.json",
+      "bytes": 200156,
+      "sha256": "e4bca693871e5efbd86dab4d25213b34b9409ad38cc4782ebdbb12e127b3d738"
+    },
+    {
+      "path": "runs/avida_pilot/avida_1db17ffb76b6c06fe0935d79/model.log",
+      "bytes": 1718,
+      "sha256": "3c9c7dbef07772847363310bf1995d2a942ccafc5fb5e53cbe41dd69e628123f"
+    },
+    {
+      "path": "runs/avida_pilot/avida_1db17ffb76b6c06fe0935d79/outputs/avida_1db17ffb76b6c06fe0935d79_best.pdb",
+      "bytes": 386863,
+      "sha256": "ff158e3582dfe31dee352f915b4be34762aade1744ea55cd1f3a03246415dbfe"
+    },
+    {
+      "path": "runs/avida_pilot/avida_baf6f2ce5cd6dc14755caedb/attempt.json",
+      "bytes": 1249,
+      "sha256": "d1422b63796bf17234ce1cd5e018cce92695f00ca0e8d26278c0eeabe9bd22be"
+    },
+    {
+      "path": "runs/avida_pilot/avida_baf6f2ce5cd6dc14755caedb/input.json",
+      "bytes": 200151,
+      "sha256": "03b7d911e77e31c10951125f475b8f16292966b76aa7541953cc5f601d5dcffb"
+    },
+    {
+      "path": "runs/avida_pilot/avida_baf6f2ce5cd6dc14755caedb/model.log",
+      "bytes": 1718,
+      "sha256": "4b54104f939c235cd7c1c5f67b83e60bb4177e5440a2fb8fface0ce6468bdbe5"
+    },
+    {
+      "path": "runs/avida_pilot/avida_baf6f2ce5cd6dc14755caedb/outputs/avida_baf6f2ce5cd6dc14755caedb_best.pdb",
+      "bytes": 377483,
+      "sha256": "20461e3d5abbe5ba1abbbdac564acd4d1c56486684863d349ac39afc8ce7d282"
+    },
+    {
+      "path": "runs/avida_pilot/preflight.json",
+      "bytes": 1256,
+      "sha256": "63ee882da586c859fa4905123edc029bb835bac9b0681cb71e0f6f98daa97326"
+    },
+    {
+      "path": "src/data/download_avida.py",
+      "bytes": 2529,
+      "sha256": "f53cd3aa9f9e501e932ffa966137aeac8a9a16324b5ea72fb1d104b5cf8e3fac"
+    },
+    {
+      "path": "src/data/prepare_avida.py",
+      "bytes": 9358,
+      "sha256": "c8f94f8354d2583ccdfd1704c2c54789940a10177b66d7997a3e0fe15c85a111"
+    },
+    {
+      "path": "src/evaluate/audit_avida.py",
+      "bytes": 2591,
+      "sha256": "b44e2d8fb17c32380b32bb69e3be14e790886e4eaa619c0efc57d91ee1a1b9c1"
+    },
+    {
+      "path": "src/evaluate/avida_baseline.py",
+      "bytes": 8674,
+      "sha256": "195fcc36215caa4015e0289b437016e54468f11e43640fa9f7cdbe158c3619e7"
+    },
+    {
+      "path": "src/evaluate/avida_pilot.py",
+      "bytes": 12012,
+      "sha256": "6c6300eb51b7ee33b7116da90a2e25e44076d56a4fcdf0e1f06d38514f7e8153"
+    },
+    {
+      "path": "src/evaluate/requirements-avida-lock.txt",
+      "bytes": 396,
+      "sha256": "109ec86c44ca4561355a9c8fc640abc0ccd63c65bd6b59ce8b828636e00ca017"
+    },
+    {
+      "path": "src/evaluate/requirements-avida.txt",
+      "bytes": 99,
+      "sha256": "af4744479a405e20ff16ff36d4b032ae781f3b558bdb40622b7ebbacb29a4aba"
+    },
+    {
+      "path": "src/evaluate/test_avida.py",
+      "bytes": 6053,
+      "sha256": "4ee62b0261fa8e305f72477ccb58fe893edd3593c13f3c2e5d08aea5a4b6441e"
+    },
+    {
+      "path": "src/evaluate/test_avida_pilot.py",
+      "bytes": 3403,
+      "sha256": "65d4547164c77e622b4b94e0667496aba04b2fdcd11533fae5cfee8047d33b64"
+    }
+  ],
+  "note": "Raw data, curated full tables, models and pilot structures are ignored by Git; regenerate or transfer separately."
+}

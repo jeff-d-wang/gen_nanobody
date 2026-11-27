@@ -1,0 +1,10 @@
+{
+  "source_commit": "44d4b710c6ec9530113ce106d41f4ac0ba4baefa",
+  "script_sha256": "eb536e642739912b55e17526bc6502a9805194c9a45de5df2e13daadc4219a1e",
+  "archive": "runs/rfab_benchmark_1ce3344e4822",
+  "input_manifest_sha256": "fb837a73d8c30a63b3ae478fc33334d2cf32bc70b209c19bcf7d1e8cbde0f099",
+  "audit": "Revalidated accepted structures and sequence lineage without modifying archive",
+  "sequence_deduplication": "Exact full H-chain residue sequence; all-scope deduplication is global",
+  "timing": "Recorded seconds summed across all stage attempts, including unaccepted attempts",
+  "scientific_filter": "Not defined; pass count missing, not zero"
+}

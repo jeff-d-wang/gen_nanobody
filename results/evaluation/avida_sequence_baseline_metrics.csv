@@ -1,0 +1,9 @@
+model,split,metric,value,ci95_low,ci95_high,pairs,positives,clusters,precision_k,bootstrap_valid_draws,scoring_seconds
+VHH_trigram_plus_antigen_additive_logistic,development,average_precision,0.06859940704156342,0.0076483813296891,0.19156972908828573,86084,318,1632,100,1000,0.132
+VHH_trigram_plus_antigen_additive_logistic,development,auroc,0.6425131339521591,0.5086961782989138,0.8033349412813965,86084,318,1632,100,1000,0.132
+VHH_trigram_plus_antigen_additive_logistic,development,precision_at_k,0.21,0.0,0.56,86084,318,1632,100,1000,0.132
+VHH_trigram_plus_antigen_additive_logistic,development,prevalence,0.003694066260861484,0.0019518197009662135,0.006345380867440011,86084,318,1632,100,1000,0.132
+VHH_trigram_plus_antigen_additive_logistic,test,average_precision,0.00875352404931575,0.004503392973218715,0.015501098694017293,86084,306,1634,100,1000,0.141
+VHH_trigram_plus_antigen_additive_logistic,test,auroc,0.7087681843859899,0.6478939372537628,0.7808082738192175,86084,306,1634,100,1000,0.141
+VHH_trigram_plus_antigen_additive_logistic,test,precision_at_k,0.0,0.0,0.0,86084,306,1634,100,1000,0.141
+VHH_trigram_plus_antigen_additive_logistic,test,prevalence,0.0035546675340365225,0.0016095873522432263,0.006347622973387699,86084,306,1634,100,1000,0.141

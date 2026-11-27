@@ -1,0 +1,29 @@
+{
+  "cuda_available": true,
+  "torch_version": "2.3.1+cu118",
+  "gpu": "NVIDIA GeForce RTX 3060 Ti",
+  "gpu_memory_free_total_bytes": [
+    7472152576,
+    8589410304
+  ],
+  "boltz_installed": false,
+  "pyrosetta_installed": false,
+  "upstream_commit": "3e5a5bb1cb98befde9fc049ae3ff58cabb491f67",
+  "upstream_dirty": false,
+  "rf2_weights_sha256": "cb38916458f5a9ecad0cf33182d816a836204b58896c59bd5a4ef475f63950e7",
+  "pilot_pairs_sha256": "84f5a7c052bd5f6f3e7d210cbbd6f793f7ceb35bede2fb098841134774e53042",
+  "template_url": "https://files.rcsb.org/download/1ALU.pdb",
+  "template_sha256": "37a666e3b62dca0dd61a029c430f936800efcb872f734655429816bfb9f845db",
+  "template_backbone_residues": 157,
+  "full_released_target_residues": 218,
+  "pdb_to_release_zero_based_offset": 27,
+  "missing_target_residues": 61,
+  "template_policy": "Observed chain A residues must match exact released WT sequence via DBREF; all missing atoms masked; full released sequences retained",
+  "parameters": {
+    "recycles": 1,
+    "seed": 37,
+    "hotspot_show_proportion": 0.0,
+    "timeout_seconds_per_pair": 600
+  },
+  "limitations": "Pilot only; RF2 not independent final predictor; signal/His-tag construct policy unvalidated; no Rosetta score; no balanced-pilot AUPRC"
+}

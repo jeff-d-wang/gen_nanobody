@@ -15,17 +15,23 @@
 \usepackage{tikz}
 \usetikzlibrary{arrows.meta}
 
-% Bibliography machinery retained for later use; this proposal cites sources as
-% inline hyperlinks, so no bibliography is printed.
-\IfFileExists{csquotes.sty}{\usepackage{csquotes}}{}
-\IfFileExists{biblatex.sty}{%
-  \usepackage[style=numeric-comp,natbib=true,maxbibnames=3,minnames=1,backend=bibtex,doi=false,eprint=false,url=false]{biblatex}
-  \addbibresource{ref.bib}
-}{%
-  \usepackage[numbers,sort&compress]{natbib}
-}
-
-\input{pre}
+% All manuscript text and custom definitions are maintained in this file.
+% Sources use attributed inline hyperlinks; no bibliography backend is needed.
+\definecolor{gred}{RGB}{250,210,207}
+\definecolor{coolblue1}{rgb}{0.91,0.94,0.98}
+\definecolor{coolblue2}{rgb}{0.76,0.85,0.94}
+\definecolor{coolblue3}{rgb}{0.54,0.72,0.87}
+\definecolor{coolblue4}{rgb}{1,1,1}
+\newcommand{\ourbench}{\textsc{YourBenchmark}\xspace}
+\newcommand{\ourbenchmini}{\texttt{YourBenchmark-mini}\xspace}
+\newcommand{\ourbenchnum}{XXX\xspace}
+\newcommand{\ourmodel}{YourModel\xspace}
+\newcommand{\ourbaseline}{YourBaseline\xspace}
+\renewcommand{\topfraction}{0.9}
+\renewcommand{\bottomfraction}{0.8}
+\renewcommand{\textfraction}{0.08}
+\renewcommand{\floatpagefraction}{0.85}
+\setcounter{totalnumber}{4}
 
 
 
@@ -62,25 +68,34 @@
 
 
 \begin{abstract}
-% ---------- begin sec/000abstract.tex ----------
-We propose a computational study of nanobody design for a specified protein epitope. The pipeline combines antibody-adapted RFdiffusion for backbone generation, ProteinMPNN for sequence design, and structure prediction with Alphafold 3 scoring for candidate selection. We will test how epitope constraints, sequence sampling, and filtering affect design quality and diversity. The intended outcome is a reproducible workflow and a shortlist of candidates for experimental testing.
-% ---------- end sec/000abstract.tex ----------
+We study epitope-directed nanobody design using RFantibody backbone generation,
+ProteinMPNN sequence design and structural evaluation. Separately, for
+experimental binder recognition (RQ1), we curated 573,891 AVIDa-hIL6 pairs and
+constructed a split that keeps related VHH sequences and all their antigen-variant
+measurements together. A fixed sequence-only baseline achieved test average
+precision 0.00875 at prevalence 0.00355 and AUROC 0.709, but recovered no positives
+among its top 100 pairs. A four-pair RF2 modeling pilot completed in 246.55 seconds
+of summed model-process wall time. Substantial close contacts and missing energy
+and independent-predictor measurements for these experimental pairs prevented
+a full structural RQ1 comparison. These findings establish a reproducible label
+benchmark and a feasibility limit, not experimental binding of generated candidates.
 \end{abstract}
 
 \section{Introduction}
 \label{sec:intro}
-% ---------- begin sec/010intro.tex ----------
-Nanobodies are compact antibody fragments that can recognize specific protein surfaces. Designing them against a chosen epitope could support targeted therapeutics and molecular detection. The central problem is to identify sequences that both retain the nanobody fold and form the intended binding interface.\\\\
-Sequence generation alone does not explicitly establish a binding geometry. Conversely, a plausible backbone may lack a sequence that reliably adopts it. Existing structure-based methods address these problems, but candidate selection remains uncertain: prediction confidence measures structural confidence, not experimental binding success. \href{https://www.ebi.ac.uk/training/online/courses/alphafold/inputs-and-outputs/evaluating-alphafolds-predicted-structures-using-confidence-scores/confidence-scores-in-alphafold-multimer/}{AlphaFold confidence documentation}\\\\
+Nanobodies are compact antibody fragments that can recognize specific protein surfaces. Designing them against a chosen epitope could support targeted therapeutics and molecular detection. The central problem is to identify sequences that both retain the nanobody fold and form the intended binding interface.
+
+
+Sequence generation alone does not explicitly establish a binding geometry. Conversely, a plausible backbone may lack a sequence that reliably adopts it. Existing structure-based methods address these problems, but candidate selection remains uncertain: prediction confidence measures structural confidence, not experimental binding success. \href{https://www.ebi.ac.uk/training/online/courses/alphafold/inputs-and-outputs/evaluating-alphafolds-predicted-structures-using-confidence-scores/confidence-scores-in-alphafold-multimer/}{AlphaFold confidence documentation}
+
+
 We propose to implement and evaluate an epitope-directed design pipeline built on existing models. The intuition is to constrain the binding geometry first, sample compatible sequences, and then check whether predicted structures recover the intended interface. The research contribution will be a controlled evaluation of design and selection choices within this established approach.
-% ---------- end sec/010intro.tex ----------
 
 \section{Related Work}
 \label{sec:related}
-% ---------- begin sec/020related.tex ----------
 \begin{center}
 \small
-\begin{tabular}{@{}p{0.23\linewidth} p{0.71\linewidth}@{}}
+\begin{tabular}{@{}>{\raggedright\arraybackslash}p{0.23\linewidth} >{\raggedright\arraybackslash}p{0.71\linewidth}@{}}
 \toprule
 \textbf{Category} & \textbf{Relevant work and relationship to this project} \\
 \midrule
@@ -101,11 +116,12 @@ Computational assessment & AlphaFold confidence metrics and \href{https://docs.r
     \item \textbf{DiffAb:} joint antibody sequence and structure design. Public code and weights; useful for CDR redesign comparisons, although its input assumptions differ.
     \url{https://github.com/luost26/diffab}
 \end{itemize}
-% ---------- end sec/020related.tex ----------
 
 \section{Proposed Method}
 \label{sec:method}
-% ---------- begin sec/030method.tex ----------
+The diagram describes the intended design and screening protocol. The completed
+AVIDa study in Section~\ref{sec:rq1} does not establish its energy-scoring or
+independent final-evaluation stages for those experimental pairs.
 % \begin{figure}[htbp]
 % \centering
 % \includegraphics[width=0.33\linewidth]{fig/pipeline.png}
@@ -127,14 +143,18 @@ Computational assessment & AlphaFold confidence metrics and \href{https://docs.r
         \draw[-{Stealth[scale=2]}] (e) -- (f);
     \end{tikzpicture}
 \end{center}
-We will preserve a selected nanobody framework while generating its complementarity-determining regions (CDRs) around the specified target surface. ProteinMPNN will sample multiple CDR sequences for each backbone while keeping the framework sequence fixed.\\\\
-Then, we will predict complexes without supplying the generated CDR backbone or binding pose as a template. Evaluation will include framework and CDR pLDDT, interchain PAE, ipTM where available, hotspot contacts, and deviation from the designed interface after target alignment.\\\\
+The protocol preserves a selected nanobody framework while generating CDR
+backbones around the specified surface. ProteinMPNN samples compatible CDR
+sequences while keeping the framework sequence fixed.
+
+
+Then, we will predict complexes without supplying the generated CDR backbone or binding pose as a template. Evaluation will include framework and CDR pLDDT, interchain PAE, ipTM where available, hotspot contacts, and deviation from the designed interface after target alignment.
+
+
 Rosetta interface scores and shape complementarity will help rank geometrically plausible candidates. These scores are approximate computational assessments, not measured binding free energies. Selection thresholds will be calibrated on a development set before evaluation on held-out targets.
-% ---------- end sec/030method.tex ----------
 
 \section{Experiments}
 \label{sec:experiment}
-% ---------- begin sec/040experiment.tex ----------
 We will evaluate three aspects of the pipeline: recognition of known binders,
 ranking by measured affinity, and generation of new candidates against targets
 with known nanobody complexes. The first two experiments assess candidate
@@ -144,7 +164,7 @@ seeds where applicable. The claims below are hypotheses to test.
 
 \begin{center}
 \small
-\begin{tabular}{@{}p{0.26\linewidth} p{0.35\linewidth} p{0.31\linewidth}@{}}
+\begin{tabular}{@{}>{\raggedright\arraybackslash}p{0.26\linewidth} >{\raggedright\arraybackslash}p{0.35\linewidth} >{\raggedright\arraybackslash}p{0.31\linewidth}@{}}
 \toprule
 \textbf{Research question} & \textbf{Proposed claim} & \textbf{Evidence needed} \\
 \midrule
@@ -173,7 +193,159 @@ interface overlays; distinct candidate yield versus GPU-hours. \\
 \end{center}
 
 \paragraph{Binding labels.}
-For binding classification, we will use nanobody sequences and experimental binding/nonbinding labels from AVIDa-hIL6, with AVIDa-SARS-CoV-2 as an additional benchmark. These labels reflect screening outcomes rather than quantitative affinity.
+The completed binding-label work uses AVIDa-hIL6. It comprises a sequence-only
+baseline and a four-pair modeling pilot, not a completed structural-channel
+comparison or an AVIDa-SARS-CoV-2 experiment.
+
+\subsection{RQ1: Experimental binding labels and modeling feasibility}
+\label{sec:rq1}
+
+\paragraph{Dataset and provenance.}
+We used \href{https://huggingface.co/datasets/COGNANO/AVIDa-hIL6}{AVIDa-hIL6}
+(Tsuruta et al., \href{https://proceedings.neurips.cc/paper_files/paper/2023/file/8339dacd9df7ffe9623760f74169dd1e-Paper-Datasets_and_Benchmarks.pdf}{NeurIPS 2023}),
+under CC BY-NC 4.0, pinned to revision
+\nolinkurl{cd783d573e015f83364e42287810ad597850aeed}.
+The validated release contains 573,891 distinct experimental pairs: 20,980
+positive and 552,911 negative labels, 38,599 VHH sequences and 31 IL-6 variants
+(including wild type). Antigen sequences were joined by variant identifier;
+subject metadata and source rows were retained. No rows were unmatched,
+duplicated, discarded or relabeled. Labels describe the released
+phage-display/biopanning screening assay, not measured affinity or universal
+nonbinding. Per-pair replicate and concentration metadata were unavailable in
+the source CSVs. Generated RFantibody candidates are different biological pairs
+and were not joined to these labels.
+
+\paragraph{Cluster-separated split.}
+We compared all 744,922,101 unordered VHH sequence pairs and joined sequences
+when their global Levenshtein distance satisfied
+\[
+\frac{d_{\mathrm{edit}}(s_i,s_j)}{\max(|s_i|,|s_j|)}\leq0.10.
+\]
+The resulting graph has 10,796 connected components. Each component, including
+all antigen-variant measurements of its members, stays in one split. Components
+were ordered by descending pair count, with seeded content hashes breaking ties
+(seed 37), and assigned to the split with the lowest current count relative to
+its target fraction (70/15/15 train/development/test). Assignment did not use
+labels. Neither exact VHHs nor components cross splits. Known antigen variants
+occur across splits, so this tests new VHH clusters against known variants,
+not unseen-antigen generalization or the authors' antigen-held-out benchmark.
+
+\begin{table}[htbp]
+\centering\small
+\begin{tabular}{@{}lrrrrr@{}}
+\toprule
+Split & Pairs & Positive & Negative & Positive (\%) & Clusters \\
+\midrule
+Train & 401,723 & 20,356 & 381,367 & 5.0672 & 7,530 \\
+Development & 86,084 & 318 & 85,766 & 0.3694 & 1,632 \\
+Test & 86,084 & 306 & 85,778 & 0.3555 & 1,634 \\
+\midrule
+Full release & 573,891 & 20,980 & 552,911 & 3.6557 & 10,796 \\
+\bottomrule
+\end{tabular}
+\caption{Experimental-pair counts under the fixed VHH-component split. No
+class balancing or evaluation subsampling was applied.}
+\label{tab:rq1-splits}
+\end{table}
+
+The largest component contains 15,650 VHHs and 180,555 pairs. Keeping it intact
+contributes to a substantial prevalence shift (Table~\ref{tab:rq1-splits}); we
+did not change the split after observing outcomes. Released sequences retain
+their leader-like prefixes and six-histidine tails. Shared flanks and transitive
+links can enlarge components. This explicit edit-similarity definition is not
+CDR clonotyping or proof that all biological homology has been excluded.
+
+\paragraph{Sequence-only baseline.}
+We fitted an additive logistic classifier using VHH trigram TF-IDF and one-hot
+antigen-variant indicators, with preprocessing learned only from training data.
+SGD used log loss, L2 regularization $\alpha=10^{-4}$, seed 37, tolerance
+$10^{-3}$ and at most 1,000 iterations, without class weighting. The model
+converged in seven iterations. Settings were fixed before fitting; neither
+development nor test outcomes were used to select settings or calibrate a
+structural filter. The model has no structural features or antibody--variant
+interaction features.
+
+We evaluated average precision (AP, step-integrated PR area), AUROC and
+precision at 100 experimental pairs. Each split's observed prevalence is its
+no-skill PR reference. Percentile 95\% intervals use 1,000 whole-component
+bootstrap draws (seed 371), preserving members and variant measurements, with
+the fitted model fixed. Ranking ties use pair-ID order independently of labels.
+Intervals exclude retraining and split-selection variability. No significance
+tests or model-comparison p-values were computed.
+
+\begin{table}[htbp]
+\centering\small
+\begin{tabular}{@{}lrrl@{}}
+\toprule
+Metric & Development & Test & Test 95\% interval \\
+\midrule
+Average precision & 0.068599 & 0.008754 & [0.004503, 0.015501] \\
+AUROC & 0.642513 & 0.708768 & [0.647894, 0.780808] \\
+Precision at 100 & 0.210000 & 0.000000 & [0.000000, 0.000000] \\
+Prevalence / PR reference & 0.003694 & 0.003555 & [0.001610, 0.006348] \\
+\bottomrule
+\end{tabular}
+\caption{Sequence-only RQ1 results on 86,084 development and 86,084 test pairs.
+Intervals resample VHH components; the zero-width top-100 interval is an
+empirical bootstrap result, not certainty about a population parameter.}
+\label{tab:rq1-metrics}
+\end{table}
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=\linewidth]{../results/evaluation/avida_sequence_baseline_pr.pdf}
+\caption{Fixed sequence-only baseline. Dashed lines indicate split prevalence.
+The test top 100 contain no positives; these curves do not assess structural
+scoring channels.}
+\label{fig:rq1-pr}
+\end{figure}
+
+Test AP exceeds the split's prevalence reference, but absolute precision is low
+and none of its top 100 pairs is positive (Table~\ref{tab:rq1-metrics};
+Figure~\ref{fig:rq1-pr}). The development/test AP difference and the prevalence
+shift limit interpretation. Precision at 100 counts experimental pairs, not a
+diversity-constrained shortlist of distinct VHHs. These results do not establish
+a useful high-precision screening system or performance at population prevalence.
+
+\paragraph{Four-pair structural pilot.}
+We selected two positive and two negative wild-type IL-6 pairs from four
+distinct development components by pair-ID order within label. RF2 received
+the exact released sequences and an antigen-only \href{https://www.rcsb.org/structure/1ALU}{1ALU}
+template, without an antibody backbone, docking pose or hotspot labels. The
+template supplied 157 observed backbone residues of the 218-residue antigen
+construct; every observed residue was sequence-checked using the DBREF mapping.
+The remaining 61 residues were masked, not assigned fabricated coordinates.
+Full released signal/tag-containing constructs were retained for this pilot;
+their suitability for structural scoring remains unvalidated.
+
+All four runs completed on an RTX 3060 Ti (8 GB), with seed 37 and one recycle
+(two prediction cycles), and passed finite-coordinate and exact H/T sequence
+checks. Summed model-process wall time was 246.550 seconds, or 61.638 seconds
+per pair including startup, excluding preparation and downstream geometry
+calculation. This is not measured GPU-hours. Global predicted lDDT ranged from
+0.76 to 0.77 and interchain PAE from 21.59 to 24.88~\AA. Each output nevertheless
+contained 847--2,323 interchain heavy-atom pairs at distances below 2~\AA.
+Contacts used a minimum heavy-atom distance of at most 5~\AA; neither diagnostic
+defines calibrated binding success.
+
+\paragraph{RQ1 scope decision and reproducibility.}
+At the November 26 checkpoint, we did not proceed to full structural RQ1.
+The close contacts, partial target templates and construct handling need review;
+the pilot does not determine which caused the geometry problems. No energy
+scores or independent final predictions were obtained for these AVIDa pairs.
+The separate Boltz and generated-candidate analyses in the repository concern
+different biological pairs and cannot fill these missing RQ1 channels. RF2 was
+part of the design pipeline and does not serve as its excluded final predictor.
+We report no balanced-pilot AUPRC or confidence/geometry/energy/combined-score
+comparison. The structural binder-recognition hypothesis remains unanswered.
+
+Source hashes, splits, baseline predictions, scripts and pilot artifacts are
+documented in \path{A2_AVIDA_IMPLEMENTATION_REPORT.md}, with small tables and
+figures in \path{results/evaluation/}. Twelve tests passed, including independent
+metric recomputation, cluster leakage checks, exact pilot sequence checks and
+geometry recomputation with a separate KD-tree implementation.
+
+\subsection{Affinity and generation evaluation protocol}
 
 \paragraph{Affinity data.}
 For affinity ranking, we will curate experimentally measured $K_D$ values from ANDD, SAbDab-nano, and sdAb-DB, exclude predicted affinities, and retain traceable measurement sources. Comparisons will be grouped by target construct and assay where possible. Stronger binding corresponds to lower $K_D$, or higher $pK_D = -\log_{10}(K_D/\mathrm{M})$.
@@ -185,21 +357,25 @@ Design targets are drawn from the SAbDab2 machine learning dataset \href{https:/
 Development data will be used to select scores and calibrate thresholds; held-out test data will be evaluated only after these choices are fixed. Nanobody sequence and CDR clusters will remain within a single split. Experiments testing generalization across targets will also separate antigen families. Structural benchmarks will use structures deposited after documented model training cutoffs where feasible and will be screened for homologous training examples. A recent deposition date alone does not establish that a target is unseen.
 
 \paragraph{Success criteria.}
-Classification and affinity-ranking performance will be assessed against experimental labels. A generated candidate will count as an \emph{in silico} success only if it meets thresholds fixed on the development set for design-to-reprediction CDR backbone RMSD, intended hotspot-contact recovery, interface confidence, and steric clashes. Confidence measures will include interchain PAE, CDR pLDDT, and ipTM where available. Final computational assessment will use a predictor excluded from generation and candidate selection.\\\\
+Classification and affinity-ranking performance will be assessed against experimental labels. A generated candidate will count as an \emph{in silico} success only if it meets thresholds fixed on the development set for design-to-reprediction CDR backbone RMSD, intended hotspot-contact recovery, interface confidence, and steric clashes. Confidence measures will include interchain PAE, CDR pLDDT, and ipTM where available. Final computational assessment will use a predictor excluded from generation and candidate selection.
+
+
 Native-pose metrics such as DockQ will be used only when reconstructing known complexes. Newly generated sequences may adopt valid binding poses that differ from the reference, so similarity to the reference pose will not be required for computational success.
 
 \paragraph{Controls and ablations.}
-Candidate-selection experiments will compare confidence-only, geometry-only, energy-only, and combined scoring. Generation experiments will compare hotspot-conditioned and unguided sampling under matched computational budgets. Scrambled CDR sequences may provide supplementary stress tests, but neither scrambled sequences nor untested nanobody--target pairs will be treated as experimentally confirmed nonbinders.
+The proposed comparison includes confidence-only, geometry-only, energy-only and combined scoring; it was not completed for AVIDa RQ1. Generation experiments will compare hotspot-conditioned and unguided sampling under matched computational budgets. Scrambled CDR sequences may provide supplementary stress tests, but neither scrambled sequences nor untested nanobody--target pairs will be treated as experimentally confirmed nonbinders.
 
 \paragraph{Statistical treatment and compute accounting.}
-We will report per-target results and uncertainty estimates that account for sequence relatedness. For AVIDa-hIL6, bootstrap sampling will operate over nanobody clusters, keeping measurements across IL-6 variants together. Multi-target comparisons will use target-level summaries and bootstrap intervals. Generation runs will use a fixed number of random seeds, with designs grouped by backbone and target rather than treated as independent observations. Candidate yield will be plotted against GPU-hours, and distinctness will be defined using prespecified sequence-identity thresholds and CDR structural clustering criteria.
+We will report per-target results and uncertainty estimates that account for sequence relatedness. For AVIDa-hIL6, the completed bootstrap resamples whole VHH components, keeping variant measurements together (Section~\ref{sec:rq1}). Multi-target comparisons will use target-level summaries and bootstrap intervals. Generation runs will use a fixed number of random seeds, with designs grouped by backbone and target rather than treated as independent observations. Candidate yield will be plotted against GPU-hours, and distinctness will be defined using prespecified sequence-identity thresholds and CDR structural clustering criteria.
 
 \noindent These experiments will test whether the pipeline identifies measured binders and produces structurally plausible new candidates. Claims that newly generated nanobodies bind, or outperform measured references, will require experimental measurements on those sequences.
-% ---------- end sec/040experiment.tex ----------
 
-\section{Midterm Progress}
+\section{Midterm Progress (Historical Snapshot)}
 \label{sec:midterm}
-% ---------- begin sec/045midterm.tex ----------
+This section preserves the midterm contribution and its status at that time;
+its pending-work statements are not the current project status. Completed
+AVIDa work is reported in Section~\ref{sec:rq1}.
+
 All numbers below come from the 21-target structural benchmark. No thresholds
 have been calibrated and no filtering decisions have been made, so nothing here
 is a held-out result.
@@ -250,35 +426,49 @@ the positions the model actually redesigned. Our contact code reproduces the
 independently computed 5\,\AA{} epitope on all 21 targets, a prerequisite for
 the contact-recovery metric in the end-to-end target.
 
-\paragraph{Not yet done.} The end-to-end target folds a redesigned sequence
+\paragraph{Pending at the midterm.} The end-to-end target folds a redesigned sequence
 without a template and reports pLDDT, interchain PAE and hotspot-contact
 recovery. It is implemented and queued on the cluster. We fold the native
 complex alongside as a control, because a contact-recovery number means little
 without knowing what the predictor achieves on the true complex. The generation
 sweep, the AVIDa and $K_D$ curation, and threshold calibration have not started.
-% ---------- end sec/045midterm.tex ----------
 
 \section{Analysis}
 \label{sec:analysis}
-% ---------- begin sec/050analysis.tex ----------
+\paragraph{Completed RQ1 findings.}
+The sequence-only model's test AUROC of 0.709 must be read alongside AP of
+0.00875 and zero precision at 100. Training prevalence was 5.07\%, versus
+0.36\% in test, under a split that preserves related-sequence components.
+Shared expression-related sequence features may confound the baseline, and
+its additive antigen term cannot represent sequence-specific mutation effects.
+The four-pair pilot demonstrates execution, not structural validity or binding.
+No comparison of structural score channels on AVIDa pairs was established.
+
+\paragraph{Generation analysis protocol.}
 Ablations will remove hotspot guidance and individual filtering components, and vary sequence sampling depth. Error analysis will distinguish framework distortion, CDR refolding, incorrect binding poses, and steric clashes. We will examine whether failures cluster by target or loop length and report uncertainty across targets and random seeds. Candidate counts will be grouped by backbone to avoid treating closely related sequences as independent evidence.
-% ---------- end sec/050analysis.tex ----------
 
 \section{Conclusion}
 \label{sec:conclusion}
-% ---------- begin sec/060conclusion.tex ----------
+The completed RQ1 work provides a versioned experimental-label benchmark,
+cluster-separated splits, a reproducible sequence-only baseline and measured
+modeling feasibility. Low absolute test precision and problematic pilot geometry
+limit its scientific claims: combining structural channels has not been shown
+to improve experimental binder recognition. Evaluation of generated candidates
+is a separate track and cannot substitute for scores on AVIDa experimental pairs.
+
 We aim to establish which design constraints and screening criteria produce diverse nanobody candidates that consistently recover an intended interface. The project will deliver a reproducible benchmark, an assessment of computational filtering limits, and a shortlist for experimental binding and specificity measurements.
-% ---------- end sec/060conclusion.tex ----------
 
 \section{Additional Details}
 \label{sec:additional}
-% ---------- begin sec/070additional.tex ----------
 \subsection{Directions for Going Forward}
 We can develop a candidate-ranking strategy that likely combines structural confidence and inference of geometry, calibrated according to available measured binding data. We can test hotspot guidance from the pipeline and whether, in a computational budget constraint, it is better spent possibly generating more backbones or more sequences per backbone. 
 
 % Three extensions follow naturally from the planned experiments. First, if combined scoring improves ranking on measured binders, the resulting filter can be applied prospectively to the generated candidates to produce a prioritised shortlist, which is the form in which designs would enter an experimental campaign. Second, the filtering comparison can be repeated on binder classes other than nanobodies, testing whether a ranking function calibrated on one design modality transfers to another; existing meta-analyses of de novo binder design are dominated by mini-binders rather than CDR-loop binders, so this transfer is untested. Third, the generation stage currently conditions on a fixed epitope; conditioning instead on a desired specificity profile, for example requiring contacts on one epitope while avoiding a homologous surface, would address cross-reactivity, which is the failure mode most likely to matter for therapeutic use. Experimental validation of a small number of selected candidates by binding assay remains the decisive next step and is outside the scope of this project.
 
-\subsection{Workload Split}
+\subsection{Original Workload Plan}
+The following preserves the original allocation. In the final-week execution
+plan, Aidan owns compute accounting and AVIDa RQ1; Jeffery owns generated-candidate
+evaluation and RQ3; Charlie owns affinity curation and RQ2.
 The team consists of three members, and the division follows the three experiments so that work can proceed in parallel once the shared data layer is in place.
 
 \begin{itemize}[nosep]
@@ -290,7 +480,10 @@ The team consists of three members, and the division follows the three experimen
 
 \noindent The first two weeks are shared and sequential, because the outcome of the installation and data audits determines the scope available to each member.  A deliberately simple scoring wrapper will be fixed by the end of week two so that the generation and evaluation work can proceed against a stable interface while the full scoring stack is completed.
 
-\subsection{Timeline}
+\subsection{Original Timeline and Midterm Status}
+The table and status notes below are a historical planning snapshot. The RQ1
+label benchmark, sequence baseline and feasibility pilot were completed by
+November 26; the manuscript integration follows on November 27.
 \begin{center}
 \small
 \begin{tabular}{@{}c p{0.38\linewidth} p{0.30\linewidth} c@{}}
@@ -324,9 +517,16 @@ so we are rescheduling the Nov.~15 and Nov.~22 rows: GPU-bound work moves before
 that date and CPU-only work after it.\normalsize
 
 
-\subsection{Computational Requirements}
+\subsection{Original Resource Plan and Measured RQ1 Cost}
+The resource request below is historical, not a measured cost. For completed
+RQ1, the CPU classifier fit took 2.618 seconds and its full evaluation script
+77.501 seconds. Four RF2 subprocesses totaled 246.550 seconds of wall time.
+Their accounting boundaries differ; none measures active GPU-hours. The
+sequence-only classifier was fitted from scratch; pretrained generative and
+structure-prediction models were not retrained.
+
 Cost is dominated by structure prediction and by the generation sweep rather
-than by model training; no component is trained from scratch. Evaluation is
+than by model training in the original plan. Its proposed evaluation is
 staged: all candidates are screened with the fast predictor bundled with the
 design pipeline, and only those passing screening thresholds are re-evaluated
 with the higher-accuracy predictor reserved for final scoring, which is excluded
@@ -335,5 +535,4 @@ from generation and candidate selection.
 \noindent We are requesting approximately 100 GPU-hours and 50 CPU-hours.  Per-run cost depends strongly on antigen size and on predictor configuration, so these figures are derived from the design matrix above combined with assumed per-unit timings; we will measure the end-to-end cost of a single target in week one and rescale the request from that measurement rather than from published timings. We expect the bulk of GPU-hour being budgeted for evaluations, backbone \& sequence generation, and validation of generated candidates. The sampling-depth sweep is the schedule-elastic component: a coarser grid still yields the yield-versus-compute curve that the third research question requires. Storage is modest, under 200\,GB including structure files, predicted complexes with their confidence matrices, and run manifests. At this job count failures are routine rather than exceptional, so the pipeline is built with idempotent re-runs, caching keyed by configuration fingerprint, and per-run resource accounting; these are deliverable features rather than operational conveniences. Access to the final-scoring predictor is the main scheduling dependency and will be confirmed in week one.
 
 % https://genaibiomed.github.io/GenAIBioMed2026Fall/docs/Projects/
-% ---------- end sec/070additional.tex ----------
 \end{document}

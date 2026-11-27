@@ -1,0 +1,25 @@
+{
+  "source_rows": 573891,
+  "duplicate_rows_removed": 0,
+  "curated_pairs": 573891,
+  "positives": 20980,
+  "negatives": 552911,
+  "unique_vhhs": 38599,
+  "clusters": 10796,
+  "antigens": 31,
+  "largest_cluster_vhhs": 15650,
+  "largest_cluster_pairs": 180555,
+  "cross_split_vhh_overlap": 0,
+  "cross_split_component_overlap": 0,
+  "close_pair_cross_split_edges": 0,
+  "similarity_edges": 4297707,
+  "pairwise_comparisons": 744922101,
+  "seconds": 82.251,
+  "protocol_sha256": "64d2076873bb8e5983575904dd71dc6f87a4e3e7b28997cdcdfc201da7aeda16",
+  "outputs": {
+    "avida_vhh_splits.csv.gz": "e0c65cd6bef7c20a5e5ae13e88a3c587318b1ab2fcd5602c6e027a7c908eab44",
+    "avida_pairs.csv.gz": "3688086fa5c9b12d04109196e33418c8d3078382fecf380c17514be98b9aba5f"
+  },
+  "metadata_limit": "Released subject metadata retained; per-pair library, assay replicate, concentration and KD are unavailable",
+  "sequence_policy": "Released full sequences retained verbatim, including leader-like prefixes and His6 tails; no undocumented trimming"
+}

@@ -1,0 +1,8 @@
+{
+  "pilot_pairs": 4,
+  "passed": 4,
+  "total_model_process_wall_seconds": 246.55,
+  "full_structure_rq1_gate": "no_go",
+  "reason": "Four balanced development pairs are only a throughput pilot. Energy and an independent final predictor are unavailable; released construct handling needs validation before a structural benchmark.",
+  "no_large_modeling_campaign_started": true
+}

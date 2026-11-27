@@ -2,6 +2,7 @@
 __pycache__/
 *.pyc
 .venv/
+.venv-avida/
 env/
 
 # big / regenerable
@@ -20,6 +21,7 @@ report/*.pdf
 report/*.run.xml
 report/*.bcf
 report/*.synctex.gz
+output/pdf/
 third_party/
 
 # C's benchmark deliverables: track processed benchmark data

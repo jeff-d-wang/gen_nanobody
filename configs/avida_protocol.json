@@ -1,0 +1,11 @@
+{
+  "protocol_version": 1,
+  "dataset": "COGNANO/AVIDa-hIL6",
+  "revision": "cd783d573e015f83364e42287810ad597850aeed",
+  "license": "CC-BY-NC-4.0",
+  "clustering": {"metric": "global Levenshtein distance / maximum sequence length", "maximum_distance_fraction": 0.1, "linkage": "connected_components", "workers": 4, "block_size": 256},
+  "split": {"seed": 37, "train_fraction": 0.7, "development_fraction": 0.15, "test_fraction": 0.15, "unit": "whole VHH sequence component; all antigen variants stay with VHH"},
+  "baseline": {"features": "VHH character trigrams TF-IDF plus antigen-variant one-hot; additive, no interactions", "alpha": 0.0001, "loss": "log_loss", "max_iter": 1000, "tol": 0.001, "seed": 37, "class_weight": null},
+  "evaluation": {"bootstrap_replicates": 1000, "bootstrap_seed": 371, "bootstrap_unit": "VHH sequence component", "precision_k": 100, "auprc_definition": "average_precision_score; step-integrated PR, not trapezoidal area"},
+  "pilot": {"split": "development", "antigen": "IL-6_WTs", "positives": 2, "negatives": 2, "selection": "pair-ID order, distinct sequence components", "purpose": "feasibility only; not prevalence-representative evaluation"}
+}

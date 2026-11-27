@@ -1,0 +1,29 @@
+{
+  "dataset": "COGNANO/AVIDa-hIL6",
+  "revision": "cd783d573e015f83364e42287810ad597850aeed",
+  "license": "CC-BY-NC-4.0",
+  "paper": "https://doi.org/10.48550/arXiv.2306.03329",
+  "files": [
+    {
+      "name": "AVIDa-hIL6.csv",
+      "url": "https://huggingface.co/datasets/COGNANO/AVIDa-hIL6/resolve/cd783d573e015f83364e42287810ad597850aeed/AVIDa-hIL6.csv",
+      "path": "data/raw/avida_hil6/cd783d573e015f83364e42287810ad597850aeed/AVIDa-hIL6.csv",
+      "bytes": 104655792,
+      "sha256": "917d90f111d759edc3440f577458d42ef89ff0315b186d6c266c120143b20cde"
+    },
+    {
+      "name": "antigen_sequences.csv",
+      "url": "https://huggingface.co/datasets/COGNANO/AVIDa-hIL6/resolve/cd783d573e015f83364e42287810ad597850aeed/antigen_sequences.csv",
+      "path": "data/raw/avida_hil6/cd783d573e015f83364e42287810ad597850aeed/antigen_sequences.csv",
+      "bytes": 7133,
+      "sha256": "8f023581932e626ba1e2da4f7f861b998b8fcb7516aedb785d831f8c36984e68"
+    },
+    {
+      "name": "README.md",
+      "url": "https://huggingface.co/datasets/COGNANO/AVIDa-hIL6/resolve/cd783d573e015f83364e42287810ad597850aeed/README.md",
+      "path": "data/raw/avida_hil6/cd783d573e015f83364e42287810ad597850aeed/README.md",
+      "bytes": 2467,
+      "sha256": "fec4c7e1eaff265cd666abc4d34d4e747bf9deda3200b5f58978b6b0201790cc"
+    }
+  ]
+}
