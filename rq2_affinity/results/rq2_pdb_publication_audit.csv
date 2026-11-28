@@ -1,0 +1,30 @@
+antigen,pdb_id,citation_title,pubmed_id,publication_doi,year,journal,status
+lysozyme,1MEL,Crystal structure of a camel single-domain VH antibody fragment in complex with lysozyme.,8784355,,1996,Nat Struct Biol,retrieved
+lysozyme,1RI8,Strong in vivo maturation compensates for structurally restricted H3 loops in antibody repertoires.,15659390,,2005,J Biol Chem,retrieved
+lysozyme,1RJC,Strong in vivo maturation compensates for structurally restricted H3 loops in antibody repertoires.,15659390,,2005,J Biol Chem,retrieved
+lysozyme,1XFP,Chemical Basis for the Affinity Maturation of a Camel Single Domain Antibody,15383540,,2004,J Biol Chem,retrieved
+lysozyme,1ZMY,Identification of a universal VHH framework to graft non-canonical antigen-binding loops of camel single-domain antibodies,16095608,,2005,J Mol Biol,retrieved
+lysozyme,1ZV5,Molecular basis for the preferential cleft recognition by dromedary heavy-chain antibodies.,16537393,,2006,Proc Natl Acad Sci U S A,retrieved
+lysozyme,1ZVH,Molecular basis for the preferential cleft recognition by dromedary heavy-chain antibodies.,16537393,,2006,Proc Natl Acad Sci U S A,retrieved
+lysozyme,1ZVY,Molecular basis for the preferential cleft recognition by dromedary heavy-chain antibodies.,16537393,,2006,Proc Natl Acad Sci U S A,retrieved
+lysozyme,4PGJ,Fully Human VH Single Domains That Rival the Stability and Cleft Recognition of Camelid Antibodies.,25737448,,2015,J Biol Chem,retrieved
+lysozyme,6JB2,Structural and thermodynamic basis for the recognition of the substrate-binding cleft on hen egg lysozyme by a single-domain antibody.,31664051,,2019,Sci Rep,retrieved
+lysozyme,6JB8,Structural and thermodynamic basis for the recognition of the substrate-binding cleft on hen egg lysozyme by a single-domain antibody.,31664051,,2019,Sci Rep,retrieved
+rnase,2P42,Toward chaperone-assisted crystallography: protein engineering enhancement of crystal packing and X-ray phasing capabilities of a camelid single-domain antibody (VHH) scaffold,18445622,,2008,Protein Sci,retrieved
+rnase,2P43,Toward chaperone-assisted crystallography: protein engineering enhancement of crystal packing and X-ray phasing capabilities of a camelid single-domain antibody (VHH) scaffold,18445622,,2008,Protein Sci,retrieved
+rnase,2P44,Toward chaperone-assisted crystallography: protein engineering enhancement of crystal packing and X-ray phasing capabilities of a camelid single-domain antibody (VHH) scaffold,18445622,,2008,Protein Sci,retrieved
+rnase,2P45,Toward chaperone-assisted crystallography: protein engineering enhancement of crystal packing and X-ray phasing capabilities of a camelid single-domain antibody (VHH) scaffold,18445622,,2008,Protein Sci,retrieved
+rnase,2P46,Toward chaperone-assisted crystallography: protein engineering enhancement of crystal packing and X-ray phasing capabilities of a camelid single-domain antibody (VHH) scaffold,18445622,,2008,Protein Sci,retrieved
+rnase,2P47,Toward chaperone-assisted crystallography: protein engineering enhancement of crystal packing and X-ray phasing capabilities of a camelid single-domain antibody (VHH) scaffold,18445622,,2008,Protein Sci,retrieved
+rnase,2P48,Toward chaperone-assisted crystallography: protein engineering enhancement of crystal packing and X-ray phasing capabilities of a camelid single-domain antibody (VHH) scaffold,18445622,,2008,Protein Sci,retrieved
+rnase,2P49,Exploring the capacity of minimalist protein interfaces: interface energetics and affinity maturation to picomolar KD of a single-domain antibody with a flat paratope.,17888451,,2007,J Mol Biol,retrieved
+rnase,2P4A,Exploring the capacity of minimalist protein interfaces: interface energetics and affinity maturation to picomolar KD of a single-domain antibody with a flat paratope.,17888451,,2007,J Mol Biol,retrieved
+rnase,3QSK,A combinatorial histidine scanning library approach to engineer highly pH-dependent protein switches.,21766385,,2011,Protein Sci,retrieved
+rnase,4POU,Structural basis of an engineered dual-specific antibody: conformational diversity leads to a hypervariable loop metal-binding site.,25143596,,2014,Protein Eng Des Sel,retrieved
+spike,7C8V,A synthetic nanobody targeting RBD protects hamsters from SARS-CoV-2 infection.,34330908,,2021,Nat Commun,retrieved
+spike,7C8W,A synthetic nanobody targeting RBD protects hamsters from SARS-CoV-2 infection.,34330908,,2021,Nat Commun,retrieved
+spike,7CAN,A synthetic nanobody targeting RBD protects hamsters from SARS-CoV-2 infection.,34330908,,2021,Nat Commun,retrieved
+spike,7D2Z,A high-affinity RBD-targeting nanobody improves fusion partner's potency against SARS-CoV-2.,33657135,,2021,PLoS Pathog,retrieved
+spike,7D30,A high-affinity RBD-targeting nanobody improves fusion partner's potency against SARS-CoV-2.,33657135,,2021,PLoS Pathog,retrieved
+spike,7F5G,"Isolation, characterization, and structure-based engineering of a neutralizing nanobody against SARS-CoV-2.",35460753,,2022,Int J Biol Macromol,retrieved
+spike,7F5H,Structural Characterization of a Neutralizing Nanobody With Broad Activity Against SARS-CoV-2 Variants.,35722331,,2022,Front Microbiol,retrieved

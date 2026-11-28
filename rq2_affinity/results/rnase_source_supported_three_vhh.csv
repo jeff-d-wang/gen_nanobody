@@ -1,0 +1,4 @@
+antigen,pubmed_id,doi,pdb_id,construct_hint,vhh_key,andd_kd_nM,paper_kd_nM_verified,review_status,source_construct,source_kd_nM,source_method,verification_status,residue_contacts,atom_contacts,vhh_residues,ag_residues,source_pKD
+RNase,18445622,10.1110/ps.034892.108,2P45,NEEDS_IDENTIFICATION,5799b929928baa93,116.0,,PENDING_EXACT_KD_VERIFICATION,clone 22 / SE5b,116.0,Yeast-display binding titration,SOURCE_CONSISTENT,46,434,16,16,6.935542010773082
+RNase,18445622,10.1110/ps.034892.108,2P42,NEEDS_IDENTIFICATION,eebe54e091e1d942,23.0,,PENDING_EXACT_KD_VERIFICATION,native cAb-RN05 / SE3,23.0,Yeast-display binding titration,SOURCE_CONSISTENT,46,430,16,17,7.638272163982407
+RNase,18445622,10.1110/ps.034892.108,2P44,NEEDS_IDENTIFICATION,fa13efb316c55924,20.0,,PENDING_EXACT_KD_VERIFICATION,clone 7 / SE5a,20.0,Yeast-display binding titration,SOURCE_CONSISTENT,46,443,16,18,7.698970004336019

@@ -1,0 +1,17 @@
+cohort,pdb_selection,n_vhh,metric,rho,p_unadjusted
+Original (10 VHH),first,10,residue_contacts,-0.146344183996585,0.6866405042968726
+Original (10 VHH),first,10,atom_contacts,-0.34545454545454546,0.3282265114713673
+Original (10 VHH),first,10,vhh_residues,0.6462303276414968,0.04350700501866242
+Original (10 VHH),first,10,ag_residues,-0.6940889934236018,0.025963645106943663
+Original (10 VHH),last,10,residue_contacts,-0.006079055436800647,0.9867025576451146
+Original (10 VHH),last,10,atom_contacts,-0.34545454545454546,0.3282265114713673
+Original (10 VHH),last,10,vhh_residues,0.8554858623063625,0.0015967836156345254
+Original (10 VHH),last,10,ag_residues,-0.5231388366621641,0.12074214214266064
+Exclude human VH 4PGJ,first,9,residue_contacts,-0.07531446678801507,0.8472940220818163
+Exclude human VH 4PGJ,first,9,atom_contacts,-0.38333333333333336,0.3084952723803716
+Exclude human VH 4PGJ,first,9,vhh_residues,0.7235680511449363,0.02755692719588363
+Exclude human VH 4PGJ,first,9,ag_residues,-0.644087327036082,0.06117679930250174
+Exclude human VH 4PGJ,last,9,residue_contacts,0.09999999999999999,0.797971695234851
+Exclude human VH 4PGJ,last,9,atom_contacts,-0.38333333333333336,0.3084952723803716
+Exclude human VH 4PGJ,last,9,vhh_residues,0.9193570532194486,0.0004528647456906096
+Exclude human VH 4PGJ,last,9,ag_residues,-0.4256282653793743,0.25338057398720315

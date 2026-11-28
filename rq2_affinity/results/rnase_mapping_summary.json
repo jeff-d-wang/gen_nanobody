@@ -1,0 +1,8 @@
+{
+  "analyzed_pdb_vhh_kd_records": 12,
+  "status_counts": {
+    "MAPPED_CONTACT": 12
+  },
+  "mapped_unique_vhhs": 6,
+  "warning": "Exploratory structural descriptors only. Biological assembly, assay provenance and repeated KD measurements remain to be verified."
+}

@@ -1,0 +1,24 @@
+{
+  "primary_unique_vhh": 10,
+  "source_structure_records": 11,
+  "metrics": [
+    "residue_contacts",
+    "atom_contacts",
+    "vhh_residues",
+    "ag_residues"
+  ],
+  "primary_selection": "Lexicographically first PDB per unique VHH; does not optimize the measured correlation",
+  "sensitivity": [
+    "Median per VHH",
+    "Lexicographically last PDB per VHH",
+    "Leave-one-VHH-out"
+  ],
+  "interpretation_limitations": [
+    "Exploratory, small cohort",
+    "Assay comparability not established",
+    "Experimental structures, not sequence-only prediction",
+    "Unadjusted p-values across multiple metrics",
+    "PDB selection may affect associations",
+    "Geometry alone cannot establish binding free energy"
+  ]
+}

@@ -1,0 +1,13 @@
+{
+  "total_structural_observations": 30,
+  "unique_pdbs": 29,
+  "numeric_conflict_pdbs": 4,
+  "verified_final_statistical_cohort": false,
+  "previous_correlations": "Exploratory ANDD-label associations only; not validated affinity benchmark results",
+  "next_actions": [
+    "Reconcile exact constructs and assay definitions",
+    "Trace remaining KD labels to original sources",
+    "Freeze independently verified measurements",
+    "Recalculate correlations without tuning descriptors"
+  ]
+}

@@ -1,0 +1,76 @@
+{
+  "analysis_version": "1.0.0",
+  "raw_label_status": "UNVERIFIED_SOURCE_REPORTED",
+  "informative_gate": "INFORMATIVE_PAIRS_PRESENT_UNVERIFIED",
+  "experimental_structure_only": true,
+  "formal_gate": "NO_GO_UNVERIFIED",
+  "next_route": "publication_KD_and_assay_evidence_review",
+  "mapped_qc": {
+    "total_score_rows": 559,
+    "mapping_status": {
+      "MAPPED_CONTACT": 478,
+      "NO_SEQUENCES_MATCHING_IN_COMPLEX": 80,
+      "MAPPED_NO_CONTACT": 1
+    },
+    "mapped_contact_rows": 478,
+    "mapped_distinct_pairs": 407,
+    "raw_safe_rows": 360,
+    "raw_safe_distinct_pairs": 346,
+    "global_discordant_exact_pairs": 51,
+    "excluded_mapped_rows_by_reason": {
+      "global_exact_pair_KD_conflict_gt_10pct": 99,
+      "extreme_KD_flag": 13,
+      "known_construct_or_KD_watchlist": 6
+    }
+  },
+  "verified_review": {
+    "review_rows": 0,
+    "complete_verified_reviews": 0,
+    "accepted_verified_pdb_pairs": 0,
+    "duplicates_conflicting_review": 0
+  },
+  "tiers": {
+    "strict_proxy": {
+      "groups": 245,
+      "groups_ge2": 47,
+      "groups_ge5": 1
+    },
+    "antigen_only": {
+      "groups": 244,
+      "groups_ge2": 58,
+      "groups_ge5": 5
+    },
+    "verified": {
+      "groups": 0,
+      "groups_ge2": 0,
+      "groups_ge5": 0
+    }
+  },
+  "statistical_protocol": {
+    "primary_KD_fold_separation": 3.0,
+    "sensitivity_fold_separations": [
+      1.5,
+      3.0,
+      10.0
+    ],
+    "minimum_n_for_spearman": 5,
+    "score_directions": {
+      "residue_contacts": 1,
+      "atom_contacts": 1,
+      "vhh_residues": 1,
+      "ag_residues": 1,
+      "clashes": -1
+    },
+    "training_free": true,
+    "no_p_values": true,
+    "no_independence_claim_for_pairwise_comparisons": true
+  },
+  "warnings": [
+    "Unverified ANDD real labels are not publication-verified ground truth",
+    "PDB primary citation != affinity assay paper",
+    "Antigen-only comparisons mix experimental assays and studies",
+    "Experimental solved complex features != sequence-only predicted complex features",
+    "Paired comparisons within a group are dependent; macro summary is descriptive only",
+    "Geometry-only features; no model confidence, buried SASA, or Rosetta energy in this table"
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "source_file": "Antibody and Nanobody Design Dataset (ANDD)_v2.xlsx",
+  "total_andd_rows": 48800,
+  "nanobody_rows": 30119,
+  "valid_nanobody_kd_rows": 1722,
+  "experimental_candidates_needing_review": 0,
+  "status_counts": {
+    "invalid_or_missing_kd": 28397,
+    "missing_affinity_method": 1645,
+    "predicted_exclude": 77
+  },
+  "candidate_ranking_groups": 0,
+  "note": "Experimental candidates are NOT confirmed ground truth. Verify source publications, measurement method, exact constructs, assay conditions and duplicate records before RQ2 inference."
+}

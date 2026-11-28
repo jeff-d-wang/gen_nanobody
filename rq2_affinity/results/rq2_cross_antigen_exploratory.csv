@@ -1,0 +1,5 @@
+antigen,analysis,metric,n_unique_vhh,spearman_rho,p_value_exploratory,loo_rho_min,loo_rho_max
+ribonuclease pancreatic,primary_first_pdb,residue_contacts,6,-0.1690308509457033,0.7488684500235266,-0.7071067811865475,0.7071067811865475
+ribonuclease pancreatic,primary_first_pdb,atom_contacts,6,-0.0285714285714285,0.9571545189504372,-0.3,0.7
+ribonuclease pancreatic,primary_first_pdb,vhh_residues,6,-0.1690308509457033,0.7488684500235266,-0.7071067811865475,0.7071067811865475
+ribonuclease pancreatic,primary_first_pdb,ag_residues,6,0.0,1.0,-0.2051956704170308,0.7905694150420949

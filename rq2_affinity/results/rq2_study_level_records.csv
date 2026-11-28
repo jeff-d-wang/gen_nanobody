@@ -1,0 +1,31 @@
+antigen_cohort,pubmed_id,pdb_id,vhh_key,andd_kd_nM,paper_kd_nM,paper_method,review_status,citation_title
+lysozyme,15383540,1XFP,667bd157add1ddf0,515.6564,,,PENDING_SOURCE_REVIEW,Chemical Basis for the Affinity Maturation of a Camel Single Domain Antibody
+lysozyme,15659390,1RI8,dfe2ce117012bc17,2.9,,,PENDING_SOURCE_REVIEW,Strong in vivo maturation compensates for structurally restricted H3 loops in antibody repertoires.
+lysozyme,15659390,1RJC,d64ccedfd222bfb5,0.9532694,,,PENDING_SOURCE_REVIEW,Strong in vivo maturation compensates for structurally restricted H3 loops in antibody repertoires.
+lysozyme,16095608,1ZMY,7850aa45410ee5ac,52.0,,,PENDING_SOURCE_REVIEW,Identification of a universal VHH framework to graft non-canonical antigen-binding loops of camel single-domain antibodies
+lysozyme,16537393,1ZV5,f448cc613ac06dbf,10.0,,,PENDING_SOURCE_REVIEW,Molecular basis for the preferential cleft recognition by dromedary heavy-chain antibodies.
+lysozyme,16537393,1ZVH,4b57de49f054a6c6,246.36157000000003,,,PENDING_SOURCE_REVIEW,Molecular basis for the preferential cleft recognition by dromedary heavy-chain antibodies.
+lysozyme,16537393,1ZVY,e307cacda6d9f04d,0.1,,,PENDING_SOURCE_REVIEW,Molecular basis for the preferential cleft recognition by dromedary heavy-chain antibodies.
+lysozyme,25737448,4PGJ,d33007493655b8cd,29.28841,,,PENDING_SOURCE_REVIEW,Fully Human VH Single Domains That Rival the Stability and Cleft Recognition of Camelid Antibodies.
+lysozyme,31664051,6JB2,1194d7a8cac1d9a2,0.922195,295.0,SPR kinetics,NUMERIC_CONFLICT_NEEDS_ADJUDICATION,Structural and thermodynamic basis for the recognition of the substrate-binding cleft on hen egg lysozyme by a single-domain antibody.
+lysozyme,31664051,6JB8,e307cacda6d9f04d,0.5964221000000001,0.129,SPR kinetics,NUMERIC_CONFLICT_NEEDS_ADJUDICATION,Structural and thermodynamic basis for the recognition of the substrate-binding cleft on hen egg lysozyme by a single-domain antibody.
+lysozyme,8784355,1MEL,33bf8058923f6e55,175.00197,,,PENDING_SOURCE_REVIEW,Crystal structure of a camel single-domain VH antibody fragment in complex with lysozyme.
+rnase,17888451,2P49,eebe54e091e1d942,23.0,,,PENDING_SOURCE_REVIEW,Exploring the capacity of minimalist protein interfaces: interface energetics and affinity maturation to picomolar KD of a single-domain antibody with a flat paratope.
+rnase,17888451,2P4A,7fe94153f9538ee0,0.18,,,PENDING_SOURCE_REVIEW,Exploring the capacity of minimalist protein interfaces: interface energetics and affinity maturation to picomolar KD of a single-domain antibody with a flat paratope.
+rnase,18445622,2P42,eebe54e091e1d942,23.0,,,PENDING_SOURCE_REVIEW,Toward chaperone-assisted crystallography: protein engineering enhancement of crystal packing and X-ray phasing capabilities of a camelid single-domain antibody (VHH) scaffold
+rnase,18445622,2P43,eebe54e091e1d942,23.0,,,PENDING_SOURCE_REVIEW,Toward chaperone-assisted crystallography: protein engineering enhancement of crystal packing and X-ray phasing capabilities of a camelid single-domain antibody (VHH) scaffold
+rnase,18445622,2P44,fa13efb316c55924,20.0,,,PENDING_SOURCE_REVIEW,Toward chaperone-assisted crystallography: protein engineering enhancement of crystal packing and X-ray phasing capabilities of a camelid single-domain antibody (VHH) scaffold
+rnase,18445622,2P45,5799b929928baa93,116.0,,,PENDING_SOURCE_REVIEW,Toward chaperone-assisted crystallography: protein engineering enhancement of crystal packing and X-ray phasing capabilities of a camelid single-domain antibody (VHH) scaffold
+rnase,18445622,2P46,5799b929928baa93,116.0,,,PENDING_SOURCE_REVIEW,Toward chaperone-assisted crystallography: protein engineering enhancement of crystal packing and X-ray phasing capabilities of a camelid single-domain antibody (VHH) scaffold
+rnase,18445622,2P47,5799b929928baa93,116.0,,,PENDING_SOURCE_REVIEW,Toward chaperone-assisted crystallography: protein engineering enhancement of crystal packing and X-ray phasing capabilities of a camelid single-domain antibody (VHH) scaffold
+rnase,18445622,2P48,5799b929928baa93,116.0,,,PENDING_SOURCE_REVIEW,Toward chaperone-assisted crystallography: protein engineering enhancement of crystal packing and X-ray phasing capabilities of a camelid single-domain antibody (VHH) scaffold
+rnase,21766385,3QSK,c9e185242d53a6cb,100.0,,,PENDING_SOURCE_REVIEW,A combinatorial histidine scanning library approach to engineer highly pH-dependent protein switches.
+rnase,25143596,4POU,e6b57ca94abf0bd7,157.0,,,PENDING_SOURCE_REVIEW,Structural basis of an engineered dual-specific antibody: conformational diversity leads to a hypervariable loop metal-binding site.
+rnase,25143596,4POU,e6b57ca94abf0bd7,95.7483,,,PENDING_SOURCE_REVIEW,Structural basis of an engineered dual-specific antibody: conformational diversity leads to a hypervariable loop metal-binding site.
+spike,33657135,7D2Z,0163f1366b8844fd,11.729981,,,PENDING_SOURCE_REVIEW,A high-affinity RBD-targeting nanobody improves fusion partner's potency against SARS-CoV-2.
+spike,33657135,7D30,e8e0dc0365308b27,0.5712741,,,PENDING_SOURCE_REVIEW,A high-affinity RBD-targeting nanobody improves fusion partner's potency against SARS-CoV-2.
+spike,34330908,7C8V,21f6d2bbca9048a3,3.4235543,,,PENDING_SOURCE_REVIEW,A synthetic nanobody targeting RBD protects hamsters from SARS-CoV-2 infection.
+spike,34330908,7C8W,062f20d8431db55c,1.7854164,,,PENDING_SOURCE_REVIEW,A synthetic nanobody targeting RBD protects hamsters from SARS-CoV-2 infection.
+spike,34330908,7CAN,fec18a4c74150d41,0.9499947,,,PENDING_SOURCE_REVIEW,A synthetic nanobody targeting RBD protects hamsters from SARS-CoV-2 infection.
+spike,35460753,7F5G,493ed7e19eb5badf,5.918856000000001,0.245,BLI,NUMERIC_CONFLICT_NEEDS_ADJUDICATION,"Isolation, characterization, and structure-based engineering of a neutralizing nanobody against SARS-CoV-2."
+spike,35722331,7F5H,cfe4af6ca74e1ada,39.603016,1.56,BLI,NUMERIC_CONFLICT_NEEDS_ADJUDICATION,Structural Characterization of a Neutralizing Nanobody With Broad Activity Against SARS-CoV-2 Variants.

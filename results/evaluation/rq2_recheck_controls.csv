@@ -1,0 +1,7 @@
+check,value,n,note
+mcnemar_vhh_beats_ag,14,49,VHH correct where antigen wrong
+mcnemar_ag_beats_vhh,4,49,antigen correct where VHH wrong
+mcnemar_exact_p,0.0309,49,"paired, primary tier, 3x"
+spearman_vhhres_vhhcoverage,0.0438,407,near zero rules out a coverage artefact
+frac_vhh_coverage_ge_0.95,0.9558,407,
+spearman_vhhres_agres,0.616,407,the two sides measure largely the same extent

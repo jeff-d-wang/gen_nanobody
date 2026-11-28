@@ -1,0 +1,6 @@
+source_name,provenance_name,rows,unique_vhh,antigen_names,with_pdb,complete_pairs,kd_min,kd_max
+SabDab_nano,SabDab_nano|PDB|schema_harmonisation|affinity_unit_norm,1087,488,195,1087,847,7.192331500000001e-16,22811.799
+Unlocking de novo antibody design with generative artificial intelligence.,Unlocking de novo antibody design with generative artificial intelligence.|parse_v1|,422,422,1,0,422,9.4e-10,1.46156e-06
+PDB-bind_nano,PDB-bind_nano|PDB|schema_harmonisation|affinity_unit_norm,101,92,25,101,0,1.47000000000001e-14,1e-05
+sdAB-DB,sdAB-DB|parse_v1|,32,32,4,0,32,2.29e-11,1.3e-05
+CD45 Binding Molecules and Methods of Use,CD45 Binding Molecules and Methods of Use|parse_v1|,3,2,3,0,3,1.4e-09,3.2e-08

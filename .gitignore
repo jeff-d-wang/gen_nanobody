@@ -43,3 +43,8 @@ data/processed/*
 
 # data/processed/hlt/ stays ignored: make_hlt.py regenerates it from
 # prepped_mpnn/ in seconds, and committing it would fork the CDR definition.
+
+rq2_affinity/structures/
+rq2_affinity/raw/
+rq2_affinity/logs/
+rq2_affinity/processed/
